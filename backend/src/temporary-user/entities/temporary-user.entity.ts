@@ -19,13 +19,13 @@ export class TemporaryUser {
   fatherName?: string;
 
   @Column()
-  position?: string;
+  position: string;
 
   @Column()
-  salary?: number;
+  salary: number;
 
   @Column({ type: 'timestamptz' })
-  employmentDate?: Date;
+  employmentDate: Date;
 
   @Column({ type: 'enum', enum: Role })
   role: Role;

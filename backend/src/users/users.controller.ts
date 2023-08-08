@@ -42,7 +42,10 @@ export class UsersController {
 
   @UseGuards(JwtGuard)
   @Patch()
-  async update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Req() req,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<User | string> {
     if (req.user.role === Role.USER) {
       return 'У вас нет прав на обновление данных';
     } else {

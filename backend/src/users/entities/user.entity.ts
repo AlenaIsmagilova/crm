@@ -10,7 +10,7 @@ export class User {
   username: string | null;
 
   @Column()
-  password: string;
+  password?: string;
 
   @Column()
   firstName: string;
@@ -19,7 +19,7 @@ export class User {
   lastName: string;
 
   @Column()
-  fatherName?: string;
+  fatherName: string;
 
   @Column()
   position?: string;

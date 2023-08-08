@@ -15,7 +15,7 @@ export class UsersService {
     private hashService: HashService,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = this.userRepository.create({
       ...createUserDto,
     });
@@ -25,7 +25,10 @@ export class UsersService {
     return createdUser;
   }
 
-  async createAfterComplitedRegistr(tempUser: TemporaryUser, password: string) {
+  async createAfterComplitedRegistr(
+    tempUser: TemporaryUser,
+    password: string,
+  ): Promise<User> {
     const hashedPass = await this.hashService.hashPassword(password);
 
     const createdUser = this.userRepository.create({
@@ -38,7 +41,7 @@ export class UsersService {
     return createdUser;
   }
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     const users = await this.userRepository.find();
 
     if (users.length === 0) {
@@ -48,24 +51,28 @@ export class UsersService {
     return users;
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: number): Promise<User> {
     const user = await this.userRepository.findOneBy({ id });
     return user;
   }
 
-  async findByUsername(username: string) {
+  async findByUsername(username: string): Promise<User> {
     const user = await this.userRepository.findOneBy({ username });
 
     return user;
   }
 
-  async updateOne(id: number, updateUserDto: UpdateUserDto) {
+  async updateOne(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.userRepository.findOneBy({ id });
+    const updatedUser = await this.userRepository.update(
+      user.id,
+      updateUserDto,
+    );
 
-    return this.userRepository.update(user.id, updateUserDto);
+    return user;
   }
 
-  async remove(id: number, updateUserDto: UpdateUserDto) {
+  async remove(id: number, updateUserDto: UpdateUserDto): Promise<string> {
     await this.userRepository.delete(updateUserDto.id);
     return 'Пользователь удалён';
   }

@@ -21,7 +21,7 @@ export class AuthService {
     };
   }
 
-  async validatePassword(username: string, pass: string): Promise<any> {
+  async validatePassword(username: string, pass: string): Promise<User> {
     const user = await this.userService.findByUsername(username);
 
     if (user.role === Role.SUPERADMIN) {
