@@ -12,7 +12,9 @@ export class TemporaryUsersService {
     private temporaryUserRepository: Repository<TemporaryUser>,
   ) {}
 
-  async create(createTemporaryUserDto: CreateTemporaryUserDto) {
+  async create(
+    createTemporaryUserDto: CreateTemporaryUserDto,
+  ): Promise<string> {
     //генерирую уникальный юзернэйм, чтобы вернуть его на фронт для завершения регистрации
     const uniqueUsername = generateUsername();
     const createdUser = this.temporaryUserRepository.create({
@@ -25,7 +27,7 @@ export class TemporaryUsersService {
     return createdUser.username;
   }
 
-  async findUserByUsername(username: string) {
+  findUserByUsername(username: string): Promise<TemporaryUser> {
     const user = this.temporaryUserRepository.findOneBy({ username });
 
     return user;

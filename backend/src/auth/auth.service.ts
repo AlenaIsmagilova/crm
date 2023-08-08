@@ -13,7 +13,7 @@ export class AuthService {
     private hashService: HashService,
   ) {}
 
-  auth(user: User) {
+  auth(user: User): { access_token: string } {
     const payload = { sub: user.id };
 
     return {
@@ -21,7 +21,7 @@ export class AuthService {
     };
   }
 
-  async validatePassword(username: string, pass: string) {
+  async validatePassword(username: string, pass: string): Promise<any> {
     const user = await this.userService.findByUsername(username);
 
     if (user.role === Role.SUPERADMIN) {

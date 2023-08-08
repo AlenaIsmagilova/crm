@@ -14,7 +14,10 @@ export class TemporaryUsersController {
   @UseGuards(JwtGuard)
   @Post()
   // @Roles(Role.HR, Role.SUPERADMIN)
-  create(@Req() req, @Body() createTemporaryUserDto: CreateTemporaryUserDto) {
+  create(
+    @Req() req,
+    @Body() createTemporaryUserDto: CreateTemporaryUserDto,
+  ): Promise<typeof createTemporaryUserDto | string> | string {
     if (req.user.role === Role.SUPERADMIN) {
       if (!createTemporaryUserDto.role) {
         return 'Укажите роль сотрудника, которого вы хотите создать';

@@ -15,6 +15,8 @@ import { JwtGuard } from 'src/auth/jwt.guard';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { UpdateResult } from 'typeorm/driver/mongodb/typings';
 
 @Controller('users')
 export class UsersController {
@@ -27,14 +29,14 @@ export class UsersController {
 
   @UseGuards(JwtGuard)
   @Get('me')
-  async findMe(@Req() req) {
+  async findMe(@Req() req): Promise<User> {
     const { password, ...result } = req.user;
     return result;
   }
 
   @UseGuards(JwtGuard)
   @Get()
-  findAll() {
+  findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
@@ -50,7 +52,10 @@ export class UsersController {
 
   @UseGuards(JwtGuard)
   @Delete()
-  async remove(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+  async remove(
+    @Req() req,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<string> {
     if (req.user.role === Role.USER) {
       return 'У вас нет прав на удаление данных';
     }

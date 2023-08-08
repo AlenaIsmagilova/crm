@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
@@ -33,7 +31,7 @@ import { HashService } from './hash/hash.service';
     HashModule,
     ConfigModule.forRoot({ load: [config] }),
   ],
-  controllers: [AppController, AuthController],
-  providers: [AppService, AuthService, JwtService, HashService],
+  controllers: [AuthController],
+  providers: [AuthService, JwtService, HashService],
 })
 export class AppModule {}
