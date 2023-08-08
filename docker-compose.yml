@@ -1,20 +1,30 @@
-version: '3'
+version: "3"
+
 services:
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   image: backend
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - '3000:5000'
-  #   restart: unless-stopped
+  #   backend:
+  #     build:
+  #       context: ./backend
+  #       dockerfile: Dockerfile
+  #     image: backend
+  #     depends_on:
+  #       - postgres
+  #     ports:
+  #       - "3000:5000"
+  #     restart: unless-stopped
+
+  #   frontend:
+  #     build:
+  #       context: ./frontend
+  #       dockerfile: Dockerfile
+  #     image: frontend
+  #     ports:
+  #       - "8081:80"
+  #     restart: unless-stopped
 
   postgres:
     image: postgres:15.3-alpine
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - ./pg-data:/var/lib/postgresql/testtask/pgdata
     restart: always
@@ -27,10 +37,9 @@ services:
     container_name: pgadmin4_container
     restart: always
     ports:
-      - '8888:80'
+      - "8888:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
       PGADMIN_DEFAULT_PASSWORD: password
     volumes:
       - ./pg-data:/var/lib/postgresql/testtask/pgadmin
-  

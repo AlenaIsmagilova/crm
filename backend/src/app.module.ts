@@ -24,7 +24,7 @@ import { HashService } from './hash/hash.service';
       username: 'alena_1',
       password: 'alena_1',
       database: 'nest_project_1',
-      entities: [User, TemporaryUser],
+      entities: ['./users/entities/user.entity.ts', TemporaryUser],
       synchronize: true,
     }),
     AuthModule,
