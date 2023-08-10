@@ -1,0 +1,27 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+  align-items: center;
+}
+
+.disc {
+  color: #8585ad;
+}
+
+.link {
+  text-decoration: none;
+  color: #4c4cff;
+}
+
+.buttonWrapper {
+  margin-bottom: 20px;
+}
+
+.inputWrapper {
+  margin-bottom: 6px;
+}
+
+.input {
+  padding: 5px 15px;
+}

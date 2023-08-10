@@ -7,3 +7,8 @@ export interface ITemporaryUser {
   salary: number;
   role: string;
 }
+
+export interface IRegistrationForm {
+  username: string;
+  password: string;
+}

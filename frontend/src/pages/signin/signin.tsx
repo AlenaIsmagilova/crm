@@ -1,14 +1,25 @@
-import React, { useState } from "react";
-import { FC } from "react";
-import Link from "react-router-dom";
-import { signUpApi } from "../../utils/api/api";
-import styles from "./signup.module.css";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, redirect } from "react-router-dom";
+import { setCookie } from "../../helpers";
+import { signInApi } from "../../utils/api/api";
+import styles from "./signin.module.css";
 
-const SignUp: FC = () => {
+interface ISignInProps {
+  isLoggedIn: boolean;
+}
+
+const SignIn = ({ isLoggedIn }: ISignInProps) => {
   const [values, setValues] = useState({
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/users");
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -18,17 +29,21 @@ const SignUp: FC = () => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signUpApi(values);
+    signInApi(values).then((token) => setCookie("access_token", token));
   };
+
+  if (isLoggedIn) {
+    return redirect("/");
+  }
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <h2 className={styles.title}>Завершение регистрации</h2>
+      <h2 className={styles.title}>Вход</h2>
       <div className={styles.inputWrapper}>
         <input
           name="username"
           className={styles.input}
-          placeholder={"Имя пользователя, полученное от HR"}
+          placeholder={"Имя пользователя"}
           onChange={handleChange}
           value={values.username}
         />
@@ -37,13 +52,13 @@ const SignUp: FC = () => {
         <input
           name="password"
           className={styles.input}
-          placeholder={"Придумайте пароль"}
+          placeholder={"Пароль"}
           onChange={handleChange}
           value={values.password}
         />
       </div>
       <div className={styles.buttonWrapper}>
-        <button type="submit">Зарегистрироваться</button>
+        <button type="submit">Войти</button>
       </div>
       <p className={styles.disc}>
         Вы — новый пользователь и у вас есть персональная ссылка для
@@ -53,13 +68,13 @@ const SignUp: FC = () => {
         </Link> */}
       </p>
       <p className={styles.disc}>
-        Уже зарегистрированы?
+        Хотите создать нового пользователя?
         {/* <Link to="/register" className={styles.link}>
-          &nbsp;Войти
+          &nbsp;Создать
         </Link> */}
       </p>
     </form>
   );
 };
 
-export default SignUp;
+export default SignIn;
