@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FC } from "react";
 import Link from "react-router-dom";
+import { createTemporaryUserApi } from "../../utils/api/api";
 import styles from "./signup.module.css";
 
 const SignUp: FC = () => {
@@ -8,9 +9,9 @@ const SignUp: FC = () => {
     firstname: "",
     lastname: "",
     fathersname: "",
-    employmentDate: "",
+    employmentDate: new Date(),
     position: "",
-    salary: "",
+    salary: 0,
     role: "",
   });
 
@@ -22,6 +23,7 @@ const SignUp: FC = () => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    createTemporaryUserApi(values);
   };
 
   return (

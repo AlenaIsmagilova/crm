@@ -1,14 +1,18 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { HashService } from 'src/hash/hash.service';
+import {
+  Body,
+  Controller,
+  NotFoundException,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { TemporaryUsersService } from 'src/temporary-user/temporary-users.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { RegistrationDto } from './dto/registration.dto';
 import { LocalGuard } from './local.guard';
 
-@Controller()
+@Controller('users')
 export class AuthController {
   constructor(
     private usersService: UsersService,
@@ -17,13 +21,13 @@ export class AuthController {
   ) {}
 
   @UseGuards(LocalGuard)
-  @Post('users/signin')
+  @Post('/signin')
   login(@Req() req): { access_token: string } {
-    /* здесь генерируется для пользователя JWT-токен */
+    // здесь генерируется для пользователя JWT-токен
     return this.authService.auth(req.user);
   }
 
-  @Post('users/signup')
+  @Post('/signup')
   async signup(@Body() registrationDto: RegistrationDto): Promise<{
     access_token: string;
   }> {
@@ -32,15 +36,16 @@ export class AuthController {
     );
 
     if (!tempUser) {
-      console.log(
+      throw new NotFoundException(
         'Пользователь не найден. Обратитесь к вашему HR для регистрации',
       );
+
       return;
     }
 
     const { password } = registrationDto;
 
-    /* При регистрации создаём пользователя и генерируем для него токен */
+    // при регистрации создаю пользователя и генерирую для него токен
     const registratedUser = await this.usersService.createAfterComplitedRegistr(
       tempUser,
       password,

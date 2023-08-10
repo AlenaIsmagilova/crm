@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { HashService } from 'src/hash/hash.service';
-import { Role } from 'src/role/role.enum';
+import { Role } from 'src/types/role.enum';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 
@@ -23,22 +23,21 @@ export class AuthService {
 
   async validatePassword(username: string, pass: string): Promise<User> {
     const user = await this.userService.findByUsername(username);
-
-    if (user.role === Role.SUPERADMIN) {
-      return user;
-    } else {
-      const decodedPswrd = await this.hashService.comparePassword(
-        pass,
-        user.password,
-      );
-
-      if (user && decodedPswrd) {
-        //возвращаем юзера без пароля на фронт
-        const { password, ...result } = user;
-
-        return result;
-      }
-      return null;
+    if (!user) {
+      throw new NotFoundException('Пользователя не существует');
     }
+
+    const decodedPswrd = await this.hashService.comparePassword(
+      pass,
+      user.password,
+    );
+
+    if (user && decodedPswrd) {
+      //возвращаю юзера без пароля в req
+      const { password, ...result } = user;
+
+      return result;
+    }
+    return null;
   }
 }

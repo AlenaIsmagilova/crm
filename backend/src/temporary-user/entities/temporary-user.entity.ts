@@ -1,5 +1,11 @@
-import { Role } from 'src/role/role.enum';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Role } from '../../types/role.enum';
 
 @Entity()
 export class TemporaryUser {
@@ -29,4 +35,10 @@ export class TemporaryUser {
 
   @Column({ type: 'enum', enum: Role })
   role: Role;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

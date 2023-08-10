@@ -1,7 +1,13 @@
-import { Role } from 'src/role/role.enum';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Role } from 'src/types/role.enum';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity({ synchronize: false })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,14 +28,20 @@ export class User {
   fatherName: string;
 
   @Column()
-  position?: string;
+  position: string;
 
   @Column()
-  salary?: number;
+  salary: number;
 
-  @Column({ type: 'timestamptz' })
-  employmentDate?: Date;
+  @Column({ type: Date, default: () => 'Now()' })
+  employmentDate: Date;
 
   @Column({ default: Role.USER })
-  role?: Role;
+  role: Role;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

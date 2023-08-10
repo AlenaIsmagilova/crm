@@ -7,16 +7,14 @@ import {
   Req,
   Patch,
   Delete,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { RolesGuard } from 'src/role/role.guard';
 import { JwtGuard } from 'src/auth/jwt.guard';
-import { Roles } from 'src/role/role.decorator';
-import { Role } from 'src/role/role.enum';
+import { Role } from 'src/types/role.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { UpdateResult } from 'typeorm/driver/mongodb/typings';
 
 @Controller('users')
 export class UsersController {
@@ -46,11 +44,10 @@ export class UsersController {
     @Req() req,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User | string> {
-    if (req.user.role === Role.USER) {
-      return 'У вас нет прав на обновление данных';
-    } else {
+    if (req.user.role === (Role.HR || Role.SUPERADMIN)) {
       return await this.usersService.updateOne(updateUserDto.id, updateUserDto);
     }
+    throw new ForbiddenException('У вас нет прав на обновление данных');
   }
 
   @UseGuards(JwtGuard)
@@ -59,9 +56,9 @@ export class UsersController {
     @Req() req,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<string> {
-    if (req.user.role === Role.USER) {
-      return 'У вас нет прав на удаление данных';
+    if (req.user.role === (Role.HR || Role.SUPERADMIN)) {
+      return await this.usersService.remove(updateUserDto.id, updateUserDto);
     }
-    return await this.usersService.remove(updateUserDto.id, updateUserDto);
+    throw new ForbiddenException('У вас нет прав на удаление данных');
   }
 }
