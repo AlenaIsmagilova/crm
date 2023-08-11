@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FC } from "react";
-import Link from "react-router-dom";
+import { Link } from "react-router-dom";
 import { createTemporaryUserApi } from "../../utils/api/api";
 import styles from "./create-user.module.css";
 
@@ -9,7 +9,7 @@ const CreateUser: FC = () => {
     firstname: "",
     lastname: "",
     fathersname: "",
-    employmentDate: new Date(),
+    employmentDate: "",
     position: "",
     salary: 0,
     role: "",
@@ -58,6 +58,7 @@ const CreateUser: FC = () => {
       </div>
       <div className={styles.inputWrapper}>
         <input
+          type="date"
           name="employmentDate"
           className={styles.input}
           placeholder={"Дата трудоустройства"}
@@ -97,15 +98,15 @@ const CreateUser: FC = () => {
       </div>
       <p className={styles.disc}>
         Уже есть персональная ссылка для регистрации?
-        {/* <Link to="/login" className={styles.link}>
+        <Link to="/sugnup" className={styles.link}>
           &nbsp;Завершить регистрацию
-        </Link> */}
+        </Link>
       </p>
       <p className={styles.disc}>
-        Уже зарегистрированы?
-        {/* <Link to="/login" className={styles.link}>
+        Вы зарегистрированы?
+        <Link to="/signin" className={styles.link}>
           &nbsp;Войти
-        </Link> */}
+        </Link>
       </p>
     </form>
   );

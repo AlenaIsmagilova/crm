@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FC } from "react";
-import Link from "react-router-dom";
+import { Link } from "react-router-dom";
 import { signUpApi } from "../../utils/api/api";
 import styles from "./signup.module.css";
 
@@ -48,15 +48,15 @@ const SignUp: FC = () => {
       <p className={styles.disc}>
         Вы — новый пользователь и у вас есть персональная ссылка для
         регистрации?
-        {/* <Link to="/register" className={styles.link}>
+        <Link to="/register" className={styles.link}>
           &nbsp;Завершить регистрацию
-        </Link> */}
+        </Link>
       </p>
       <p className={styles.disc}>
         Уже зарегистрированы?
-        {/* <Link to="/register" className={styles.link}>
+        <Link to="/register" className={styles.link}>
           &nbsp;Войти
-        </Link> */}
+        </Link>
       </p>
     </form>
   );

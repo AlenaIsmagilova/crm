@@ -1,4 +1,5 @@
 import { baseUrl } from "../../constants/constants";
+import { getCookie } from "../../helpers";
 import { IRegistrationForm, ITemporaryUser } from "../../helpers/types";
 
 export const API = {
@@ -12,7 +13,10 @@ export const createTemporaryUserApi = (form: ITemporaryUser) => {
   return (
     fetch(`${API.baseUrl}/temp-users`, {
       method: "POST",
-      headers: API.headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("access_token")}`,
+      } as HeadersInit,
       body: JSON.stringify({
         firstname: form.firstname,
         lastname: form.lastname,

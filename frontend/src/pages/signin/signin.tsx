@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setCookie } from "../../helpers";
 import { signInApi } from "../../utils/api/api";
 import styles from "./signin.module.css";
@@ -8,7 +8,7 @@ interface ISignInProps {
   isLoggedIn: boolean;
 }
 
-const SignIn = ({ isLoggedIn }: ISignInProps) => {
+const SignIn = ({ isLoggedIn }: ISignInProps): JSX.Element => {
   const [values, setValues] = useState({
     username: "",
     password: "",
@@ -17,7 +17,7 @@ const SignIn = ({ isLoggedIn }: ISignInProps) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/users");
+      navigate("/");
     }
   }, [isLoggedIn, navigate]);
 
@@ -29,12 +29,10 @@ const SignIn = ({ isLoggedIn }: ISignInProps) => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signInApi(values).then((token) => setCookie("access_token", token));
+    signInApi(values).then((token) =>
+      setCookie("access_token", token.access_token)
+    );
   };
-
-  if (isLoggedIn) {
-    return redirect("/");
-  }
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
@@ -63,15 +61,15 @@ const SignIn = ({ isLoggedIn }: ISignInProps) => {
       <p className={styles.disc}>
         Вы — новый пользователь и у вас есть персональная ссылка для
         регистрации?
-        {/* <Link to="/register" className={styles.link}>
+        <Link to="/signup" className={styles.link}>
           &nbsp;Завершить регистрацию
-        </Link> */}
+        </Link>
       </p>
       <p className={styles.disc}>
         Хотите создать нового пользователя?
-        {/* <Link to="/register" className={styles.link}>
+        <Link to="/" className={styles.link}>
           &nbsp;Создать
-        </Link> */}
+        </Link>
       </p>
     </form>
   );

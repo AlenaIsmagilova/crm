@@ -15,6 +15,7 @@ export class TemporaryUsersController {
     @Body() createTemporaryUserDto: CreateTemporaryUserDto,
   ): Promise<typeof createTemporaryUserDto | string> | string {
     if (req.user.role === Role.SUPERADMIN) {
+      console.log(this.temporaryUserService.create(createTemporaryUserDto));
       return this.temporaryUserService.create(createTemporaryUserDto);
     } else if (req.user.role === Role.HR) {
       return this.temporaryUserService.create({

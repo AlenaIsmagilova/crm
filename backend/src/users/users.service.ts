@@ -25,19 +25,20 @@ export class UsersService {
     const superAdminUser = await this.userRepository.findOneBy({
       role: Role.SUPERADMIN,
     });
+
     if (superAdminUser) {
       return;
-    } else {
-      const hashedPasswordForSuperAdmin = await this.hashService.hashPassword(
-        'superadmin',
-      );
-      const createdUser = await this.userRepository.create({
-        ...superAdmin,
-        password: hashedPasswordForSuperAdmin,
-      });
-      await this.userRepository.save(createdUser);
-      return createdUser;
     }
+
+    const hashedPasswordForSuperAdmin = await this.hashService.hashPassword(
+      'superadmin',
+    );
+    const createdUser = this.userRepository.create({
+      ...superAdmin,
+      password: hashedPasswordForSuperAdmin,
+    });
+    await this.userRepository.save(createdUser);
+    return createdUser;
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {

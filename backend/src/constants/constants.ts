@@ -9,6 +9,4 @@ export const superAdmin = {
   salary: 0,
   employmentDate: new Date(),
   role: Role.SUPERADMIN,
-  createdAt: new Date(),
-  updatedAt: new Date(),
 };

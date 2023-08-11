@@ -2,7 +2,7 @@ export interface ITemporaryUser {
   firstname: string;
   lastname: string;
   fathersname: string;
-  employmentDate: Date;
+  employmentDate: string;
   position: string;
   salary: number;
   role: string;

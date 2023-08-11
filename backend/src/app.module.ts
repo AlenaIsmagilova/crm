@@ -9,6 +9,7 @@ import { TemporaryUser } from './temporary-user/entities/temporary-user.entity';
 import { TemporaryUsersModule } from './temporary-user/temporary-users.module';
 import { HashModule } from './hash/hash.module';
 import { HashService } from './hash/hash.service';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { HashService } from './hash/hash.service';
       username: 'alena_1',
       password: 'alena_1',
       database: 'nest_project_1',
-      entities: ['dist/**/*.entity{.ts,.js}', TemporaryUser],
+      entities: [User, TemporaryUser],
       synchronize: true,
     }),
     AuthModule,
