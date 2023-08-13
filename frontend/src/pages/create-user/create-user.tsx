@@ -104,14 +104,10 @@ const CreateUser: FC = () => {
             />
           </div>
           <div className={styles.buttonWrapper}>
-            <button type="submit">Создать пользователя</button>
+            <button className={styles.button} type="submit">
+              Создать пользователя
+            </button>
           </div>
-          <p className={styles.disc}>
-            Вы зарегистрированы?
-            <Link to="/signin" className={styles.link}>
-              &nbsp;Войти
-            </Link>
-          </p>
         </form>
       ) : (
         <div className={styles.alert}>
@@ -119,7 +115,11 @@ const CreateUser: FC = () => {
             Oтправьте ссылку новому сотруднику для завершения регистрации
             http://localhost:3000/{username}
           </p>
-          <button onClick={prevStepClick} type="button">
+          <button
+            className={styles.button}
+            onClick={prevStepClick}
+            type="button"
+          >
             Вернуться назад
           </button>
         </div>

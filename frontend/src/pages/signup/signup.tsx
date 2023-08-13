@@ -41,7 +41,7 @@ const SignUp: FC = () => {
           setErrorText(data.message);
         });
       });
-  }, [params.username]);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -66,7 +66,7 @@ const SignUp: FC = () => {
           <h2 className={styles.title}>Завершение регистрации</h2>
           <h3>
             Добро пожаловать в нашу компанию, {`${currentUser.firstName}`}. Это
-            твое имя пользователя:
+            твое имя пользователя:&nbsp;
             {`${params.username}`}. Запомни его, пожалуйста, и используй каждый
             раз для входа в систему.
           </h3>
@@ -80,7 +80,9 @@ const SignUp: FC = () => {
             />
           </div>
           <div className={styles.buttonWrapper}>
-            <button type="submit">Зарегистрироваться</button>
+            <button className={styles.button} type="submit">
+              Зарегистрироваться
+            </button>
           </div>
           <p className={styles.disc}>
             Уже зарегистрированы?

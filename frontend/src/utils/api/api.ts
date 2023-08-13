@@ -39,7 +39,7 @@ export const signInApi = (form: ISignInForm) => {
       username: form.username,
       password: form.password,
     }),
-  }).then((res) => res.json());
+  });
 };
 
 export const signUpApi = (form: IRegistrationForm, username: string) => {
@@ -79,4 +79,44 @@ export const getUsers = () => {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     } as HeadersInit,
   }).then((res) => res.json());
+};
+
+export const updateUserApi = (form: ITemporaryUser) => {
+  return fetch(`${API.baseUrl}/users`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    } as HeadersInit,
+    body: JSON.stringify({
+      firstName: form.firstName,
+      lastName: form.lastName,
+      fatherName: form.fatherName,
+      employmentDate: form.employmentDate,
+      position: form.position,
+      salary: form.salary,
+      role: form.role,
+      id: form.id,
+    }),
+  }).then((res) => res.json());
+};
+
+export const deleteUserApi = (user: ITemporaryUser) => {
+  return fetch(`${API.baseUrl}/users`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    } as HeadersInit,
+    body: JSON.stringify({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      fatherName: user.fatherName,
+      employmentDate: user.employmentDate,
+      position: user.position,
+      salary: user.salary,
+      role: user.role,
+      id: user.id,
+    }),
+  });
 };

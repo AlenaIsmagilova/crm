@@ -6,6 +6,7 @@ export interface ITemporaryUser {
   position: string;
   salary: number;
   role: string;
+  id?: string;
 }
 
 export interface IRegistrationForm {

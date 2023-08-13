@@ -44,7 +44,7 @@ export class UsersController {
     @Req() req,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User | string> {
-    if (req.user.role === (Role.HR || Role.SUPERADMIN)) {
+    if (req.user.role === Role.HR || req.user.role === Role.SUPERADMIN) {
       return await this.usersService.updateOne(updateUserDto.id, updateUserDto);
     }
     throw new ForbiddenException('У вас нет прав на обновление данных');
@@ -56,7 +56,7 @@ export class UsersController {
     @Req() req,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<string> {
-    if (req.user.role === (Role.HR || Role.SUPERADMIN)) {
+    if (req.user.role === Role.HR || req.user.role === Role.SUPERADMIN) {
       return await this.usersService.remove(updateUserDto.id, updateUserDto);
     }
     throw new ForbiddenException('У вас нет прав на удаление данных');

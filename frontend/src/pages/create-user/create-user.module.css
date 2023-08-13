@@ -1,12 +1,18 @@
+.input {
+  padding: 5px 15px;
+  background-color: #fff;
+  border: 2px solid black;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  width: 200px;
+}
+
 .form {
   display: flex;
   flex-direction: column;
-  margin-top: 100px;
+  justify-content: center;
+  max-width: 400px;
   align-items: center;
-}
-
-.disc {
-  color: #8585ad;
 }
 
 .link {
@@ -22,14 +28,35 @@
   margin-bottom: 6px;
 }
 
-.input {
-  padding: 5px 15px;
-}
-
 .alert {
   display: flex;
   justify-content: center;
   align-items: center;
   min-width: 200px;
   min-height: 100px;
+}
+
+.button {
+  width: 200px;
+  margin-top: 15px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  background: white;
+  color: black;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.button:hover {
+  color: white;
+  background: black;
+  transition: 0.3s;
+}
+
+.alert {
+  display: flex;
+  flex-direction: column;
 }
