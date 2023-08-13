@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getUser } from "../../utils/api/api";
-import styles from "./user.module.css";
+import { getUser, getUsers } from "../../utils/api/api";
+import styles from "./profile.module.css";
 
-const User = ({ setIsLoggedIn }: any) => {
+const Profile = ({ setIsLoggedIn }: any) => {
   const [currentUser, setCurrentUser] = useState({
     firstName: "",
     lastName: "",
@@ -13,10 +13,23 @@ const User = ({ setIsLoggedIn }: any) => {
     salary: 0,
     role: "",
   });
+  const [allUsers, setAllUsers] = useState([
+    {
+      firstName: "",
+      lastName: "",
+      fatherName: "",
+      employmentDate: "",
+      position: "",
+      salary: 0,
+      role: "",
+      id: "",
+    },
+  ]);
   const navigate = useNavigate();
 
   useEffect(() => {
     getUser().then((user) => setCurrentUser(user));
+    getUsers().then((users) => setAllUsers(users));
   }, []);
 
   const handleExitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,6 +56,21 @@ const User = ({ setIsLoggedIn }: any) => {
           </Link>
         </p>
       )}
+      <ul>
+        {allUsers
+          .filter((user) => user.role !== "SUPERADMIN")
+          .map((user) => (
+            <li key={user.id}>
+              <p>Имя: {user.firstName}</p>
+              <p>Фамилия: {user.lastName}</p>
+              <p>Отчество: {user.fatherName}</p>
+              <p>Дата трудоустройства: {user.employmentDate}</p>
+              <p>Должность: {user.position}</p>
+              <p>Заработная плата: {user.salary}</p>
+            </li>
+          ))}
+      </ul>
+
       <button type="button" onClick={handleExitClick}>
         Выйти из профиля
       </button>
@@ -50,4 +78,4 @@ const User = ({ setIsLoggedIn }: any) => {
   );
 };
 
-export default User;
+export default Profile;

@@ -11,7 +11,6 @@ const SignIn = ({ isLoggedIn }: ISignInProps): JSX.Element => {
   });
   const navigate = useNavigate();
 
-  console.log(isLoggedIn);
   if (isLoggedIn) {
     navigate({ pathname: "/users/me" });
   }

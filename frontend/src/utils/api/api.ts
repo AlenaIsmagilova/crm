@@ -70,3 +70,13 @@ export const getUser = () => {
     } as HeadersInit,
   }).then((res) => res.json());
 };
+
+export const getUsers = () => {
+  return fetch(`${API.baseUrl}/users`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    } as HeadersInit,
+  }).then((res) => res.json());
+};

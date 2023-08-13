@@ -5,7 +5,7 @@ import "./App.css";
 import CreateUser from "./pages/create-user/create-user";
 import SignIn from "./pages/signin/signin";
 import SignUp from "./pages/signup/signup";
-import User from "./pages/user/user";
+import Profile from "./pages/profile/profile";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,7 +28,7 @@ function App() {
       <Route path="/" element={<CreateUser />} />
       <Route
         path="/users/me"
-        element={<User setIsLoggedIn={setIsLoggedIn} />}
+        element={<Profile setIsLoggedIn={setIsLoggedIn} />}
       />
     </Routes>
   );
