@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FC } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createTemporaryUserApi } from "../../utils/api/api";
 import styles from "./create-user.module.css";
 
