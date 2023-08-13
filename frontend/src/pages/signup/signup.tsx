@@ -1,14 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FC } from "react";
-import { Link } from "react-router-dom";
-import { signUpApi } from "../../utils/api/api";
+import { Link, useParams } from "react-router-dom";
+import { json } from "stream/consumers";
+import { setCookie } from "../../helpers";
+import { getCurrentTemporaryUserApi, signUpApi } from "../../utils/api/api";
 import styles from "./signup.module.css";
+
+type TParams = {
+  username: string;
+};
 
 const SignUp: FC = () => {
   const [values, setValues] = useState({
-    username: "",
     password: "",
   });
+  const [currentUser, setCurrentUser] = useState({
+    firstName: "",
+    lastName: "",
+    fatherName: "",
+    employmentDate: "",
+    position: "",
+    salary: 0,
+    role: "",
+  });
+  const params = useParams<TParams>();
+  const [errorInUsername, setErrorInUsername] = useState(false);
+  const [errorText, setErrorText] = useState("");
+
+  useEffect(() => {
+    getCurrentTemporaryUserApi(params.username as string)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(res);
+      })
+      .then((user) => setCurrentUser(user))
+      .catch((error) => {
+        error.json().then((data: any) => {
+          setErrorInUsername(true);
+          setErrorText(data.message);
+        });
+      });
+  }, [params.username]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -18,13 +52,19 @@ const SignUp: FC = () => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signUpApi(values);
+    signUpApi(values, params.username as string).then((token) =>
+      setCookie("access_token", token)
+    );
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <h2 className={styles.title}>Завершение регистрации</h2>
-      <div className={styles.inputWrapper}>
+    <>
+      {errorInUsername ? (
+        <p>{`${errorText}`}. Обратитесь к своему HR</p>
+      ) : (
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <h2 className={styles.title}>Завершение регистрации</h2>
+          {/* <div className={styles.inputWrapper}>
         <input
           name="username"
           className={styles.input}
@@ -32,33 +72,34 @@ const SignUp: FC = () => {
           onChange={handleChange}
           value={values.username}
         />
-      </div>
-      <div className={styles.inputWrapper}>
-        <input
-          name="password"
-          className={styles.input}
-          placeholder={"Придумайте пароль"}
-          onChange={handleChange}
-          value={values.password}
-        />
-      </div>
-      <div className={styles.buttonWrapper}>
-        <button type="submit">Зарегистрироваться</button>
-      </div>
-      <p className={styles.disc}>
-        Вы — новый пользователь и у вас есть персональная ссылка для
-        регистрации?
-        <Link to="/register" className={styles.link}>
-          &nbsp;Завершить регистрацию
-        </Link>
-      </p>
-      <p className={styles.disc}>
-        Уже зарегистрированы?
-        <Link to="/register" className={styles.link}>
-          &nbsp;Войти
-        </Link>
-      </p>
-    </form>
+      </div> */}
+          <h3>
+            Добро пожаловать в нашу компанию, {`${currentUser.firstName}`}. Это
+            твое имя пользователя:
+            {`${params.username}`}. Запомни его, пожалуйста, и используй каждый
+            раз для входа в систему.
+          </h3>
+          <div className={styles.inputWrapper}>
+            <input
+              name="password"
+              className={styles.input}
+              placeholder={"Придумайте пароль"}
+              onChange={handleChange}
+              value={values.password}
+            />
+          </div>
+          <div className={styles.buttonWrapper}>
+            <button type="submit">Зарегистрироваться</button>
+          </div>
+          <p className={styles.disc}>
+            Уже зарегистрированы?
+            <Link to="/register" className={styles.link}>
+              &nbsp;Войти
+            </Link>
+          </p>
+        </form>
+      )}
+    </>
   );
 };
 

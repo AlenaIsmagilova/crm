@@ -25,3 +25,11 @@
 .input {
   padding: 5px 15px;
 }
+
+.alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 200px;
+  min-height: 100px;
+}

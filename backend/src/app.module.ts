@@ -10,6 +10,8 @@ import { TemporaryUsersModule } from './temporary-user/temporary-users.module';
 import { HashModule } from './hash/hash.module';
 import { HashService } from './hash/hash.service';
 import { User } from './users/entities/user.entity';
+import { ConfigModule } from '@nestjs/config';
+import configs from './config/configuration';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { User } from './users/entities/user.entity';
       entities: [User, TemporaryUser],
       synchronize: true,
     }),
+    ConfigModule.forRoot({ load: [configs] }),
     AuthModule,
     HashModule,
   ],

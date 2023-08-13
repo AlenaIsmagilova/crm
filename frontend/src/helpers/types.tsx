@@ -1,7 +1,7 @@
 export interface ITemporaryUser {
-  firstname: string;
-  lastname: string;
-  fathersname: string;
+  firstName: string;
+  lastName: string;
+  fatherName: string;
   employmentDate: string;
   position: string;
   salary: number;
@@ -9,6 +9,14 @@ export interface ITemporaryUser {
 }
 
 export interface IRegistrationForm {
+  password: string;
+}
+
+export interface ISignInForm {
   username: string;
   password: string;
+}
+
+export interface ISignInProps {
+  isLoggedIn: boolean;
 }

@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { setCookie } from "../../helpers";
+import { ISignInProps } from "../../helpers/types";
 import { signInApi } from "../../utils/api/api";
 import styles from "./signin.module.css";
-
-interface ISignInProps {
-  isLoggedIn: boolean;
-}
 
 const SignIn = ({ isLoggedIn }: ISignInProps): JSX.Element => {
   const [values, setValues] = useState({
@@ -17,7 +14,7 @@ const SignIn = ({ isLoggedIn }: ISignInProps): JSX.Element => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/");
+      navigate({ pathname: "/users/me" });
     }
   }, [isLoggedIn, navigate]);
 
