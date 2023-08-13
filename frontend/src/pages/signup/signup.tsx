@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FC } from "react";
-import { Link, useParams } from "react-router-dom";
-import { json } from "stream/consumers";
-import { setCookie } from "../../helpers";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getCurrentTemporaryUserApi, signUpApi } from "../../utils/api/api";
 import styles from "./signup.module.css";
 
@@ -26,6 +24,7 @@ const SignUp: FC = () => {
   const params = useParams<TParams>();
   const [errorInUsername, setErrorInUsername] = useState(false);
   const [errorText, setErrorText] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCurrentTemporaryUserApi(params.username as string)
@@ -52,9 +51,10 @@ const SignUp: FC = () => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signUpApi(values, params.username as string).then((token) =>
-      setCookie("access_token", token)
-    );
+    signUpApi(values, params.username as string).then((token) => {
+      localStorage.setItem("access_token", token.access_token);
+      navigate({ pathname: "/users/me" });
+    });
   };
 
   return (
@@ -64,15 +64,6 @@ const SignUp: FC = () => {
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>
           <h2 className={styles.title}>Завершение регистрации</h2>
-          {/* <div className={styles.inputWrapper}>
-        <input
-          name="username"
-          className={styles.input}
-          placeholder={"Имя пользователя, полученное от HR"}
-          onChange={handleChange}
-          value={values.username}
-        />
-      </div> */}
           <h3>
             Добро пожаловать в нашу компанию, {`${currentUser.firstName}`}. Это
             твое имя пользователя:

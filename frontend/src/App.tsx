@@ -2,7 +2,6 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { getCookie } from "./helpers";
 import CreateUser from "./pages/create-user/create-user";
 import SignIn from "./pages/signin/signin";
 import SignUp from "./pages/signup/signup";
@@ -11,13 +10,13 @@ import User from "./pages/user/user";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const cookie = getCookie("access_token");
+  const token = localStorage.getItem("access_token");
 
   useEffect(() => {
-    if (cookie) {
+    if (token) {
       setIsLoggedIn(true);
     }
-  }, [cookie, isLoggedIn]);
+  }, [token, isLoggedIn]);
 
   return (
     <Routes>
@@ -27,7 +26,10 @@ function App() {
       ></Route>
       <Route path="/:username" element={<SignUp />} />
       <Route path="/" element={<CreateUser />} />
-      <Route path="/users/me" element={<User />} />
+      <Route
+        path="/users/me"
+        element={<User setIsLoggedIn={setIsLoggedIn} />}
+      />
     </Routes>
   );
 }

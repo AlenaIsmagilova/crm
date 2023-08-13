@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { deleteCookie } from "../../helpers";
 import { getUser } from "../../utils/api/api";
 import styles from "./user.module.css";
 
-const User = () => {
+const User = ({ setIsLoggedIn }: any) => {
   const [currentUser, setCurrentUser] = useState({
     firstName: "",
     lastName: "",
@@ -18,13 +17,13 @@ const User = () => {
 
   useEffect(() => {
     getUser().then((user) => setCurrentUser(user));
-  }, [currentUser]);
+  }, []);
 
-  const handleExitClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    deleteCookie("access_token");
+  const handleExitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    localStorage.removeItem("access_token");
+    setIsLoggedIn(false);
     navigate({ pathname: "/signin" });
-    console.log(1);
   };
 
   return (
@@ -36,12 +35,14 @@ const User = () => {
       <p>Дата трудоустройства: {currentUser.employmentDate}</p>
       <p>Должность: {currentUser.position}</p>
       <p>Заработная плата: {currentUser.salary}</p>
-      <p className={styles.disc}>
-        Хотите создать нового пользователя?
-        <Link to="/" className={styles.link}>
-          &nbsp;Создать
-        </Link>
-      </p>
+      {currentUser.role !== "USER" && (
+        <p className={styles.disc}>
+          Хотите создать нового пользователя?
+          <Link to="/" className={styles.link}>
+            &nbsp;Создать
+          </Link>
+        </p>
+      )}
       <button type="button" onClick={handleExitClick}>
         Выйти из профиля
       </button>

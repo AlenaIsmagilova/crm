@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { setCookie } from "../../helpers";
 import { ISignInProps } from "../../helpers/types";
 import { signInApi } from "../../utils/api/api";
 import styles from "./signin.module.css";
@@ -12,11 +11,10 @@ const SignIn = ({ isLoggedIn }: ISignInProps): JSX.Element => {
   });
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate({ pathname: "/users/me" });
-    }
-  }, [isLoggedIn, navigate]);
+  console.log(isLoggedIn);
+  if (isLoggedIn) {
+    navigate({ pathname: "/users/me" });
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -26,9 +24,10 @@ const SignIn = ({ isLoggedIn }: ISignInProps): JSX.Element => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signInApi(values).then((token) =>
-      setCookie("access_token", token.access_token)
-    );
+    signInApi(values).then((token) => {
+      localStorage.setItem("access_token", token.access_token);
+      navigate({ pathname: "/users/me" });
+    });
   };
 
   return (

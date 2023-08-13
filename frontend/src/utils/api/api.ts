@@ -1,5 +1,4 @@
 import { baseUrl } from "../../constants/constants";
-import { getCookie, setCookie } from "../../helpers";
 import {
   IRegistrationForm,
   ISignInForm,
@@ -18,7 +17,7 @@ export const createTemporaryUserApi = (form: ITemporaryUser) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${getCookie("access_token")}`,
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     } as HeadersInit,
     body: JSON.stringify({
       firstName: form.firstName,
@@ -67,17 +66,7 @@ export const getUser = () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${getCookie("access_token")}`,
-    } as HeadersInit,
-  }).then((res) => res.json());
-};
-
-export const logOutApi = () => {
-  return fetch(`${API.baseUrl}/users/logout`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getCookie("access_token")}`,
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     } as HeadersInit,
   }).then((res) => res.json());
 };
