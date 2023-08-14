@@ -30,7 +30,7 @@ export class TemporaryUser {
   @Column()
   salary: number;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: Date })
   employmentDate: Date;
 
   @Column({ type: 'enum', enum: Role })

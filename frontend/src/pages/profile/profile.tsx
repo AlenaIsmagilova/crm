@@ -1,4 +1,9 @@
-import { SetStateAction, useEffect, useState } from "react";
+import {
+  JSXElementConstructor,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   deleteUserApi,
@@ -13,7 +18,7 @@ const Profile = ({ setIsLoggedIn }: any) => {
     firstName: "",
     lastName: "",
     fatherName: "",
-    employmentDate: "",
+    employmentDate: Date,
     position: "",
     salary: 0,
     role: "",
@@ -106,7 +111,8 @@ const Profile = ({ setIsLoggedIn }: any) => {
         <p>Имя: {currentUser.firstName}</p>
         <p>Фамилия: {currentUser.lastName}</p>
         <p>Отчество: {currentUser.fatherName}</p>
-        <p>Дата трудоустройства: {currentUser.employmentDate}</p>
+        <p>Дата трудоустройства:</p>
+        <p>{currentUser.employmentDate.toLocaleString()}</p>
         <p>Должность: {currentUser.position}</p>
         <p>Заработная плата: {currentUser.salary} руб.</p>
       </div>
