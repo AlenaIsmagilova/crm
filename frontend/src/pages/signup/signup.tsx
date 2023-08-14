@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { FC } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { getCurrentTemporaryUserApi, signUpApi } from '../../utils/api/api';
-import styles from './signup.module.css';
+import React, { useEffect, useState } from "react";
+import { FC } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { getCurrentTemporaryUserApi, signUpApi } from "../../utils/api/api";
+import styles from "./signup.module.css";
 
 type TParams = {
   username: string;
@@ -20,25 +20,25 @@ const SignUp: FC<ISignUpProps> = ({
   setCurrentUser,
 }) => {
   const [values, setValues] = useState({
-    password: '',
+    password: "",
   });
   const [tempUser, setTempUser] = useState({
-    firstName: '',
-    lastName: '',
-    fatherName: '',
-    employmentDate: '',
-    position: '',
+    firstName: "",
+    lastName: "",
+    fatherName: "",
+    employmentDate: "",
+    position: "",
     salary: 0,
-    role: '',
+    role: "",
   });
   const params = useParams<TParams>();
   const [errorInUsername, setErrorInUsername] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/');
+      navigate("/");
     }
   }, [isLoggedIn, navigate]);
 
@@ -70,10 +70,10 @@ const SignUp: FC<ISignUpProps> = ({
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     signUpApi(values, params.username as string).then((data) => {
-      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem("access_token", data.access_token);
       setIsLoggedIn(true);
       setCurrentUser(data.user);
-      navigate({ pathname: '/' });
+      navigate({ pathname: "/" });
     });
   };
 
@@ -92,21 +92,21 @@ const SignUp: FC<ISignUpProps> = ({
           </h3>
           <div className={styles.inputWrapper}>
             <input
-              name='password'
+              name="password"
               className={styles.input}
-              placeholder={'Придумайте пароль'}
+              placeholder={"Придумайте пароль"}
               onChange={handleChange}
               value={values.password}
             />
           </div>
           <div className={styles.buttonWrapper}>
-            <button className={styles.button} type='submit'>
+            <button className={styles.button} type="submit">
               Зарегистрироваться
             </button>
           </div>
           <p className={styles.disc}>
             Уже зарегистрированы?
-            <Link to='/register' className={styles.link}>
+            <Link to="/register" className={styles.link}>
               &nbsp;Войти
             </Link>
           </p>

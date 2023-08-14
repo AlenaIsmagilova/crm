@@ -6,7 +6,6 @@ import {
   UseGuards,
   Req,
   Patch,
-  Delete,
   ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -51,14 +50,14 @@ export class UsersController {
   }
 
   @UseGuards(JwtGuard)
-  @Delete()
-  async remove(
+  @Patch('firement')
+  async updateAfterFirement(
     @Req() req,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<string> {
+    @Body() userId: { id: number },
+  ): Promise<User | string> {
     if (req.user.role === Role.HR || req.user.role === Role.SUPERADMIN) {
-      return await this.usersService.remove(updateUserDto.id, updateUserDto);
+      return await this.usersService.updateOneAfterFired(userId.id);
     }
-    throw new ForbiddenException('У вас нет прав на удаление данных');
+    throw new ForbiddenException('У вас нет прав на увольнение сотрудника');
   }
 }

@@ -15,6 +15,9 @@ export class RegistrationDto {
   fatherName: string;
 
   @IsNotEmpty()
+  birthDate: Date;
+
+  @IsNotEmpty()
   position: string;
 
   @IsNotEmpty()

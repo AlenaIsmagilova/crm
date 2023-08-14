@@ -1,23 +1,18 @@
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  JSXElementConstructor,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import {
-  deleteUserApi,
-  getUser,
   getUsers,
+  updateUserAfterFirementApi,
   updateUserApi,
-} from '../../utils/api/api';
-import styles from './profile.module.css';
+} from "../../utils/api/api";
+import styles from "./profile.module.css";
 
 interface IUser {
   id?: number;
   firstName: string;
   lastName: string;
   fatherName: string;
+  birthDate: string;
   employmentDate: string;
   position: string;
   salary: number;
@@ -27,13 +22,14 @@ interface IUser {
 const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
   const [allUsers, setAllUsers] = useState<IUser[]>([]);
   const [editedUserValues, setEditedUserValues] = useState({
-    firstName: '',
-    lastName: '',
-    fatherName: '',
-    employmentDate: '',
-    position: '',
+    firstName: "",
+    lastName: "",
+    fatherName: "",
+    birthDate: "",
+    employmentDate: "",
+    position: "",
     salary: 0,
-    role: '',
+    role: "",
   });
 
   const [userIdEditMode, setUserIdEditMode] = useState<number | null>(null);
@@ -41,7 +37,7 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate('/signin');
+      navigate("/signin");
     }
   }, [isLoggedIn, navigate]);
 
@@ -50,7 +46,7 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
       getUsers()
         .then((users) => setAllUsers(users))
         .catch((err) => {
-          navigate('/signin');
+          navigate("/signin");
         });
     }
   }, []);
@@ -61,9 +57,9 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
 
   const handleExitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    localStorage.removeItem('access_token');
+    localStorage.removeItem("access_token");
     setIsLoggedIn(false);
-    navigate({ pathname: '/signin' });
+    navigate({ pathname: "/signin" });
   };
 
   const handleEditUserClick = (
@@ -99,14 +95,12 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
     setUserIdEditMode(null);
   };
 
-  const handleDeleteUserClick = (
+  const handleFirementUserClick = (
     e: React.MouseEvent<HTMLButtonElement>,
     user: any
   ) => {
     e.preventDefault();
-    deleteUserApi(user);
-    const arrAfterDeletedUser = allUsers.filter((el) => el.id !== user.id);
-    setAllUsers(arrAfterDeletedUser);
+    updateUserAfterFirementApi(user.id).then((user) => updateAllUsers(user));
   };
 
   return (
@@ -116,22 +110,23 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
         <p>Имя: {currentUser.firstName}</p>
         <p>Фамилия: {currentUser.lastName}</p>
         <p>Отчество: {currentUser.fatherName}</p>
+        <p>Дата рождения: {currentUser.birthDate}</p>
         <p>Дата трудоустройства:</p>
         <p>{currentUser.employmentDate.toLocaleString()}</p>
         <p>Должность: {currentUser.position}</p>
         <p>Заработная плата: {currentUser.salary} руб.</p>
       </div>
-      {currentUser.role !== 'USER' && (
+      {currentUser.role !== "USER" && (
         <p className={styles.disc}>
           Хотите создать нового пользователя?
-          <Link to='/create-new-user' className={styles.link}>
+          <Link to="/create-new-user" className={styles.link}>
             &nbsp;Создать
           </Link>
         </p>
       )}
       <ul className={styles.list}>
         {allUsers
-          .filter((user) => user.role !== 'SUPERADMIN')
+          .filter((user) => user.role !== "SUPERADMIN")
           .map((user) => (
             <li className={styles.itemsList} key={user.id}>
               {userIdEditMode === user.id ? (
@@ -139,75 +134,85 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
                   <h2 className={styles.title}>Создание пользователя</h2>
                   <div className={styles.inputWrapper}>
                     <input
-                      name='firstName'
+                      name="firstName"
                       className={styles.input}
-                      placeholder={'Имя'}
+                      placeholder={"Имя"}
                       onChange={handleChange}
                       value={editedUserValues.firstName}
                     />
                   </div>
                   <div className={styles.inputWrapper}>
                     <input
-                      name='lastName'
+                      name="lastName"
                       className={styles.input}
-                      placeholder={'Фамилия'}
+                      placeholder={"Фамилия"}
                       onChange={handleChange}
                       value={editedUserValues.lastName}
                     />
                   </div>
                   <div className={styles.inputWrapper}>
                     <input
-                      name='fatherName'
+                      name="fatherName"
                       className={styles.input}
-                      placeholder={'Отчество'}
+                      placeholder={"Отчество"}
                       onChange={handleChange}
                       value={editedUserValues.fatherName}
                     />
                   </div>
                   <div className={styles.inputWrapper}>
                     <input
-                      type='date'
-                      name='employmentDate'
+                      type="date"
+                      name="birthDate"
                       className={styles.input}
-                      placeholder={'Дата трудоустройства'}
+                      placeholder={"Дата рождения"}
+                      onChange={handleChange}
+                      value={editedUserValues.birthDate}
+                    />
+                  </div>
+                  <div className={styles.inputWrapper}>
+                    <input
+                      type="date"
+                      name="employmentDate"
+                      className={styles.input}
+                      placeholder={"Дата трудоустройства"}
                       onChange={handleChange}
                       value={editedUserValues.employmentDate}
                     />
                   </div>
                   <div className={styles.inputWrapper}>
                     <input
-                      name='position'
+                      name="position"
                       className={styles.input}
-                      placeholder={'Должность'}
+                      placeholder={"Должность"}
                       onChange={handleChange}
                       value={editedUserValues.position}
                     />
                   </div>
                   <div className={styles.inputWrapper}>
                     <input
-                      name='salary'
+                      name="salary"
                       className={styles.input}
-                      placeholder={'Заработная плата'}
+                      placeholder={"Заработная плата"}
                       onChange={handleChange}
                       value={editedUserValues.salary}
                     />
                   </div>
                   <div className={styles.inputWrapper}>
                     <input
-                      name='role'
+                      name="role"
                       className={styles.input}
-                      placeholder={'Роль в организации'}
+                      placeholder={"Роль в организации"}
                       onChange={handleChange}
                       value={editedUserValues.role}
                     />
                   </div>
                   <div className={styles.buttonWrapper}>
-                    <button className={styles.button} type='submit'>
+                    <button className={styles.button} type="submit">
                       Сохранить
                     </button>
                     <button
                       className={styles.button}
-                      type='button'
+                      type="button"
                       onClick={handleCancelEditClick}
                     >
                       Отменить
@@ -220,25 +225,26 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
                     <p>Имя: {user.firstName}</p>
                     <p>Фамилия: {user.lastName}</p>
                     <p>Отчество: {user.fatherName}</p>
+                    <p>Дата рождения: {user.birthDate}</p>
                     <p>Дата трудоустройства: {user.employmentDate}</p>
                     <p>Должность: {user.position}</p>
                     <p>Заработная плата: {user.salary} руб.</p>
                   </div>
-                  {currentUser.role !== 'USER' && (
+                  {currentUser.role !== "USER" && (
                     <>
                       <button
                         className={styles.button}
-                        type='button'
+                        type="button"
                         onClick={(e) => handleEditUserClick(e, user)}
                       >
                         Редактировать
                       </button>
                       <button
                         className={styles.button}
-                        type='button'
-                        onClick={(e) => handleDeleteUserClick(e, user)}
+                        type="button"
+                        onClick={(e) => handleFirementUserClick(e, user)}
                       >
-                        Удалить
+                        Уволить
                       </button>
                     </>
                   )}
@@ -250,11 +256,19 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
       <div className={styles.buttonWrapper}>
         <button
           className={styles.button}
-          type='button'
+          type="button"
           onClick={handleExitClick}
         >
           Выйти из профиля
         </button>
+        {currentUser.role === "HR" && (
+          <p className={styles.disc}>
+            Посмотреть данные по компании
+            <Link to="/metrics" className={styles.link}>
+              &nbsp;Статистика
+            </Link>
+          </p>
+        )}
       </div>
     </div>
   );

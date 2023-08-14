@@ -10,6 +10,7 @@ const CreateUser: FC = () => {
     lastName: "",
     fatherName: "",
     employmentDate: "",
+    birthDate: "",
     position: "",
     salary: 0,
     role: "",
@@ -64,6 +65,16 @@ const CreateUser: FC = () => {
               placeholder={"Отчество"}
               onChange={handleChange}
               value={values.fatherName}
+            />
+          </div>
+          <div className={styles.inputWrapper}>
+            <input
+              type="date"
+              name="birthDate"
+              className={styles.input}
+              placeholder={"Дата рождения"}
+              onChange={handleChange}
+              value={values.birthDate}
             />
           </div>
           <div className={styles.inputWrapper}>

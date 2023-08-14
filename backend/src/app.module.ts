@@ -11,6 +11,7 @@ import { HashModule } from './hash/hash.module';
 import { HashService } from './hash/hash.service';
 import { User } from './users/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
+import { StatisticsModule } from './statistics/statistics.module';
 import configs from './config/configuration';
 
 @Module({
@@ -30,6 +31,7 @@ import configs from './config/configuration';
     ConfigModule.forRoot({ load: [configs] }),
     AuthModule,
     HashModule,
+    StatisticsModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtService, HashService],

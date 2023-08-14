@@ -22,7 +22,7 @@ export class TemporaryUser {
   lastName: string;
 
   @Column()
-  fatherName?: string;
+  fatherName: string;
 
   @Column()
   position: string;
@@ -32,6 +32,9 @@ export class TemporaryUser {
 
   @Column({ type: Date })
   employmentDate: Date;
+
+  @Column({ type: Date })
+  birthDate: Date;
 
   @Column({ type: 'enum', enum: Role })
   role: Role;

@@ -18,6 +18,7 @@ export class UsersService {
   ) {}
 
   public onModuleInit(): void {
+    console.log(1);
     this._createSuperAdmin();
   }
 
@@ -60,6 +61,8 @@ export class UsersService {
     const createdUser = this.userRepository.create({
       ...tempUser,
       password: hashedPass,
+      isFired: false,
+      firementDate: null,
     });
 
     await this.userRepository.save(createdUser);
@@ -95,8 +98,19 @@ export class UsersService {
     return await this.userRepository.findOneBy({ id });
   }
 
-  async remove(id: number, updateUserDto: UpdateUserDto): Promise<string> {
-    await this.userRepository.delete(updateUserDto.id);
-    return 'Пользователь удалён';
+  // async remove(id: number, updateUserDto: UpdateUserDto): Promise<string> {
+  //   await this.userRepository.delete(updateUserDto.id);
+  //   return 'Пользователь удалён';
+  // }
+
+  async updateOneAfterFired(id: number): Promise<User> {
+    const user = await this.userRepository.findOneBy({ id });
+
+    await this.userRepository.update(id, {
+      isFired: true,
+      firementDate: new Date(),
+    });
+
+    return await this.userRepository.findOneBy({ id });
   }
 }

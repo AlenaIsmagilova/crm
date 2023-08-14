@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 import { Role } from 'src/types/role.enum';
 
@@ -20,6 +20,9 @@ export class CreateTemporaryUserDto {
 
   @IsNotEmpty()
   employmentDate: Date;
+
+  @IsNotEmpty()
+  birthDate: Date;
 
   @IsNotEmpty()
   role: Role;

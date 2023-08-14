@@ -1,13 +1,14 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import './App.css';
-import CreateUser from './pages/create-user/create-user';
-import SignIn from './pages/signin/signin';
-import SignUp from './pages/signup/signup';
-import Profile from './pages/profile/profile';
-import Loader from './components/loader';
-import { getUser } from './utils/api/api';
+import React from "react";
+import { useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import "./App.css";
+import CreateUser from "./pages/create-user/create-user";
+import SignIn from "./pages/signin/signin";
+import SignUp from "./pages/signup/signup";
+import Profile from "./pages/profile/profile";
+import Loader from "./components/loader";
+import { getUser } from "./utils/api/api";
+import Metrics from "./pages/metrics/metrics";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,7 +16,7 @@ function App() {
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem("access_token");
 
   useEffect(() => {
     if (token) {
@@ -28,7 +29,7 @@ function App() {
         .catch((err) => {
           setIsLoggedIn(false);
           setCurrentUser(null);
-          localStorage.removeItem('access_token');
+          localStorage.removeItem("access_token");
         })
         .finally(() => setLoader(false));
     }
@@ -41,7 +42,7 @@ function App() {
       ) : (
         <Routes>
           <Route
-            path='/signin'
+            path="/signin"
             element={
               <SignIn
                 isLoggedIn={isLoggedIn}
@@ -51,7 +52,7 @@ function App() {
             }
           ></Route>
           <Route
-            path='/signup/:username'
+            path="/signup/:username"
             element={
               <SignUp
                 isLoggedIn={isLoggedIn}
@@ -61,7 +62,7 @@ function App() {
             }
           />
           <Route
-            path='/'
+            path="/"
             element={
               <Profile
                 isLoggedIn={isLoggedIn}
@@ -70,7 +71,8 @@ function App() {
               />
             }
           />
-          <Route path='/create-new-user' element={<CreateUser />} />
+          <Route path="/create-new-user" element={<CreateUser />} />
+          <Route path="/metrics" element={<Metrics />} />
         </Routes>
       )}
     </>

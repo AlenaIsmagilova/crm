@@ -2,6 +2,7 @@ export interface ITemporaryUser {
   firstName: string;
   lastName: string;
   fatherName: string;
+  birthDate: string;
   employmentDate: string;
   position: string;
   salary: number;
@@ -19,7 +20,7 @@ export interface ISignInForm {
 }
 
 export enum Role {
-  SUPERADMIN = 'SUPERADMIN',
-  USER = 'USER',
-  HR = 'HR',
+  SUPERADMIN = "SUPERADMIN",
+  USER = "USER",
+  HR = "HR",
 }

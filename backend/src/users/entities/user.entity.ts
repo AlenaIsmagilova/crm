@@ -28,6 +28,9 @@ export class User {
   fatherName: string;
 
   @Column()
+  birthDate: Date;
+
+  @Column()
   position: string;
 
   @Column()
@@ -35,6 +38,12 @@ export class User {
 
   @Column({ type: Date, default: () => 'Now()' })
   employmentDate: Date;
+
+  @Column({ default: false })
+  isFired: boolean;
+
+  @Column({ type: Date, nullable: true })
+  firementDate: Date;
 
   @Column({ default: Role.USER })
   role: Role;

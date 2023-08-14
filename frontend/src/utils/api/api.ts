@@ -88,13 +88,63 @@ export const updateUserApi = (form: ITemporaryUser) => {
   }).then(handleResponse);
 };
 
-export const deleteUserApi = (user: ITemporaryUser) => {
-  return fetch(`${API.baseUrl}/users`, {
-    method: "DELETE",
+export const updateUserAfterFirementApi = (userId: number) => {
+  return fetch(`${API.baseUrl}/users/firement`, {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     } as HeadersInit,
-    body: JSON.stringify(user),
+    body: JSON.stringify({ id: userId }),
+  }).then(handleResponse);
+};
+
+export const getCountOfEmployedInMonthApi = () => {
+  return fetch(`${API.baseUrl}/users/statistics/employment-month`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    } as HeadersInit,
+  }).then(handleResponse);
+};
+
+export const getCountOfEmployedInYearApi = () => {
+  return fetch(`${API.baseUrl}/users/statistics/employment-year`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    } as HeadersInit,
+  }).then(handleResponse);
+};
+
+export const getCountOfFiredInMonthApi = () => {
+  return fetch(`${API.baseUrl}/users/statistics/firement-month`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    } as HeadersInit,
+  }).then(handleResponse);
+};
+
+export const getCountOfFiredInYearApi = () => {
+  return fetch(`${API.baseUrl}/users/statistics/firement-year`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    } as HeadersInit,
+  }).then(handleResponse);
+};
+
+export const getBirthdayPeopleApi = () => {
+  return fetch(`${API.baseUrl}/users/statistics/birthday-people`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    } as HeadersInit,
   }).then(handleResponse);
 };

@@ -1,5 +1,5 @@
 import { Role } from 'src/types/role.enum';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -18,6 +18,9 @@ export class CreateUserDto {
   fatherName: string;
 
   @IsNotEmpty()
+  birthDate: Date;
+
+  @IsNotEmpty()
   position: string;
 
   @IsNotEmpty()
@@ -28,4 +31,10 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   role: Role;
+
+  @IsOptional()
+  isFired?: boolean;
+
+  @IsOptional()
+  firementDate?: Date;
 }
