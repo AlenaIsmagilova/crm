@@ -18,6 +18,8 @@ export interface ISignInForm {
   password: string;
 }
 
-export interface ISignInProps {
-  isLoggedIn: boolean;
+export enum Role {
+  SUPERADMIN = 'SUPERADMIN',
+  USER = 'USER',
+  HR = 'HR',
 }

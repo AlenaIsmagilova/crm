@@ -39,8 +39,6 @@ export class AuthController {
       throw new NotFoundException(
         'Пользователь не найден. Обратитесь к вашему HR для регистрации',
       );
-
-      return;
     }
 
     const { password } = registrationDto;
@@ -50,6 +48,8 @@ export class AuthController {
       tempUser,
       password,
     );
+
+    await this.temporaryUsersService.deleteTempUser(registrationDto.username);
 
     return this.authService.auth(registratedUser);
   }

@@ -113,7 +113,7 @@ const CreateUser: FC = () => {
         <div className={styles.alert}>
           <p>
             Oтправьте ссылку новому сотруднику для завершения регистрации
-            http://localhost:3000/{username}
+            http://localhost:3000/signup/{username}
           </p>
           <button
             className={styles.button}

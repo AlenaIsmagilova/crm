@@ -32,4 +32,8 @@ export class TemporaryUsersService {
 
     return user;
   }
+
+  async deleteTempUser(username: string): Promise<any> {
+    return await this.temporaryUserRepository.delete({ username });
+  }
 }

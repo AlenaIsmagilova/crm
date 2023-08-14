@@ -1,38 +1,79 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import "./App.css";
-import CreateUser from "./pages/create-user/create-user";
-import SignIn from "./pages/signin/signin";
-import SignUp from "./pages/signup/signup";
-import Profile from "./pages/profile/profile";
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import './App.css';
+import CreateUser from './pages/create-user/create-user';
+import SignIn from './pages/signin/signin';
+import SignUp from './pages/signup/signup';
+import Profile from './pages/profile/profile';
+import Loader from './components/loader';
+import { getUser } from './utils/api/api';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem('access_token');
 
   useEffect(() => {
-    navigate({ pathname: "/signin" });
     if (token) {
-      setIsLoggedIn(true);
+      setLoader(true);
+      getUser()
+        .then((data) => {
+          setIsLoggedIn(true);
+          setCurrentUser(data);
+        })
+        .catch((err) => {
+          setIsLoggedIn(false);
+          setCurrentUser(null);
+          localStorage.removeItem('access_token');
+        })
+        .finally(() => setLoader(false));
     }
   }, []);
 
   return (
-    <Routes>
-      <Route
-        path="/signin"
-        element={<SignIn isLoggedIn={isLoggedIn} />}
-      ></Route>
-      <Route path="/:username" element={<SignUp />} />
-      <Route path="/" element={<CreateUser />} />
-      <Route
-        path="/users/me"
-        element={<Profile setIsLoggedIn={setIsLoggedIn} />}
-      />
-    </Routes>
+    <>
+      {loader ? (
+        <Loader />
+      ) : (
+        <Routes>
+          <Route
+            path='/signin'
+            element={
+              <SignIn
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+                setCurrentUser={setCurrentUser}
+              />
+            }
+          ></Route>
+          <Route
+            path='/signup/:username'
+            element={
+              <SignUp
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+                setCurrentUser={setCurrentUser}
+              />
+            }
+          />
+          <Route
+            path='/'
+            element={
+              <Profile
+                isLoggedIn={isLoggedIn}
+                currentUser={currentUser}
+                setIsLoggedIn={setIsLoggedIn}
+              />
+            }
+          />
+          <Route path='/create-new-user' element={<CreateUser />} />
+        </Routes>
+      )}
+    </>
   );
 }
 

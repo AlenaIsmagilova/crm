@@ -12,6 +12,13 @@ export const API = {
   },
 };
 
+const handleResponse = (res: Response) => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(res);
+};
+
 export const createTemporaryUserApi = (form: ITemporaryUser) => {
   return fetch(`${API.baseUrl}/temp-users`, {
     method: "POST",
@@ -19,27 +26,16 @@ export const createTemporaryUserApi = (form: ITemporaryUser) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     } as HeadersInit,
-    body: JSON.stringify({
-      firstName: form.firstName,
-      lastName: form.lastName,
-      fatherName: form.fatherName,
-      employmentDate: form.employmentDate,
-      position: form.position,
-      salary: form.salary,
-      role: form.role,
-    }),
-  }).then((res) => res.json());
+    body: JSON.stringify(form),
+  }).then(handleResponse);
 };
 
 export const signInApi = (form: ISignInForm) => {
   return fetch(`${API.baseUrl}/users/signin`, {
     method: "POST",
     headers: API.headers,
-    body: JSON.stringify({
-      username: form.username,
-      password: form.password,
-    }),
-  });
+    body: JSON.stringify(form),
+  }).then(handleResponse);
 };
 
 export const signUpApi = (form: IRegistrationForm, username: string) => {
@@ -50,7 +46,7 @@ export const signUpApi = (form: IRegistrationForm, username: string) => {
       username,
       password: form.password,
     }),
-  }).then((res) => res.json());
+  }).then(handleResponse);
 };
 
 export const getCurrentTemporaryUserApi = (username: string) => {
@@ -58,7 +54,7 @@ export const getCurrentTemporaryUserApi = (username: string) => {
     method: "POST",
     headers: API.headers,
     body: JSON.stringify({ username }),
-  });
+  }).then(handleResponse);
 };
 
 export const getUser = () => {
@@ -68,7 +64,7 @@ export const getUser = () => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     } as HeadersInit,
-  }).then((res) => res.json());
+  }).then(handleResponse);
 };
 
 export const getUsers = () => {
@@ -78,7 +74,7 @@ export const getUsers = () => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     } as HeadersInit,
-  }).then((res) => res.json());
+  }).then(handleResponse);
 };
 
 export const updateUserApi = (form: ITemporaryUser) => {
@@ -88,17 +84,8 @@ export const updateUserApi = (form: ITemporaryUser) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     } as HeadersInit,
-    body: JSON.stringify({
-      firstName: form.firstName,
-      lastName: form.lastName,
-      fatherName: form.fatherName,
-      employmentDate: form.employmentDate,
-      position: form.position,
-      salary: form.salary,
-      role: form.role,
-      id: form.id,
-    }),
-  }).then((res) => res.json());
+    body: JSON.stringify(form),
+  }).then(handleResponse);
 };
 
 export const deleteUserApi = (user: ITemporaryUser) => {
@@ -108,15 +95,6 @@ export const deleteUserApi = (user: ITemporaryUser) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     } as HeadersInit,
-    body: JSON.stringify({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      fatherName: user.fatherName,
-      employmentDate: user.employmentDate,
-      position: user.position,
-      salary: user.salary,
-      role: user.role,
-      id: user.id,
-    }),
-  });
+    body: JSON.stringify(user),
+  }).then(handleResponse);
 };

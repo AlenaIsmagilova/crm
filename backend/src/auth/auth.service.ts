@@ -13,11 +13,12 @@ export class AuthService {
     private hashService: HashService,
   ) {}
 
-  auth(user: User): { access_token: string } {
+  auth(user: User): { access_token: string; user: User } {
     const payload = { sub: user.id };
 
     return {
       access_token: this.jwtService.sign(payload, { privateKey: 'jwtKey' }),
+      user,
     };
   }
 
