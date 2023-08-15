@@ -79,21 +79,20 @@ export class StatisticsService {
     });
   }
 
-  async birthDateInCurrentMonth() {
+  async birthDateInCurrentMonth(): Promise<any> {
     const today = new Date();
     const currYear = today.getFullYear();
     const currMonth = today.getMonth();
 
-    const arrOfBirthDayPeople = await this.userRepository.find({
+    return await this.userRepository.find({
       where: {
         birthDate: Between(
           new Date(currYear, currMonth, 1),
           new Date(currYear, currMonth, 31),
         ),
-        role: Role.HR || Role.USER,
+        role: In([Role.HR, Role.USER]),
       },
-      select: { firstName: true, lastName: true, birthDate: true },
+      select: { firstName: true, lastName: true, birthDate: true, id: true },
     });
-    console.log(arrOfBirthDayPeople, 'this is arr');
   }
 }

@@ -7,7 +7,7 @@ import {
   getCountOfFiredInYearApi,
 } from "../../utils/api/api";
 
-const Metrics = () => {
+const Metrics = ({ isLoggedIn }: any) => {
   const [countEmployedInCurrentMonth, setCountEmployedInCurrentMonth] =
     useState("");
   const [countEmployedInCurrentYear, setCountEmployedInCurrentYear] =
@@ -19,15 +19,22 @@ const Metrics = () => {
   ]);
 
   useEffect(() => {
-    getCountOfEmployedInMonthApi().then((res) =>
-      setCountEmployedInCurrentMonth(res)
-    );
-    getCountOfEmployedInYearApi().then((res) =>
-      setCountEmployedInCurrentYear(res)
-    );
-    getCountOfFiredInMonthApi().then((res) => setCountFiredInCurrentMonth(res));
-    getCountOfFiredInYearApi().then((res) => setCountFiredInCurrentYear(res));
-    getBirthdayPeopleApi().then((res) => console.log(res));
+    if (isLoggedIn) {
+      getCountOfEmployedInMonthApi().then((res) =>
+        setCountEmployedInCurrentMonth(res)
+      );
+      getCountOfEmployedInYearApi().then((res) =>
+        setCountEmployedInCurrentYear(res)
+      );
+      getCountOfFiredInMonthApi().then((res) =>
+        setCountFiredInCurrentMonth(res)
+      );
+      getCountOfFiredInYearApi().then((res) => setCountFiredInCurrentYear(res));
+      getBirthdayPeopleApi().then((res) => {
+        setBirthdayPeopleList(res);
+        console.log(res);
+      });
+    }
   }, []);
 
   return (
@@ -51,11 +58,11 @@ const Metrics = () => {
       <ul>
         В этом месяце день рождения отмечают:&nbsp;
         {birthdayPeopleList.map((el) => (
-          <div key={el.id}>
-            <li>Имя: {el.firstName}</li>
-            <li>Фамилия: {el.lastName}</li>
-            <li>Дата рождения: {el.birthDate}</li>
-          </div>
+          <li key={el.id}>
+            <p>Имя: {el.firstName}</p>
+            <p>Фамилия: {el.lastName}</p>
+            <p>Дата рождения: {el.birthDate}</p>
+          </li>
         ))}
       </ul>
     </>

@@ -72,7 +72,10 @@ function App() {
             }
           />
           <Route path="/create-new-user" element={<CreateUser />} />
-          <Route path="/metrics" element={<Metrics />} />
+          <Route
+            path="/metrics"
+            element={<Metrics isLoggedIn={isLoggedIn} />}
+          />
         </Routes>
       )}
     </>
