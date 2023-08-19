@@ -28,55 +28,60 @@ export class StatisticsService {
     private userRepository: Repository<User>,
   ) {}
 
-  private async _getCountsOfEmployedBetweenTwoDates(
+  private async _getCountsBetweenTwoDates(
     startDate,
     endDate,
+    fieldDate: 'employmentDate' | 'firementDate',
   ): Promise<number> {
     return await this.userRepository.count({
       where: {
-        employmentDate: Between(startDate, endDate),
+        [fieldDate]: Between(startDate, endDate),
         role: In([Role.HR, Role.USER]),
       },
     });
   }
 
-  private async _getCountsOfFiredBetweenTwoDates(
-    startDate,
-    endDate,
-  ): Promise<number> {
-    return await this.userRepository.count({
-      where: {
-        firementDate: Between(startDate, endDate),
-        role: In([Role.HR, Role.USER]),
-      },
-    });
-  }
+  // private async _getCountsOfFiredBetweenTwoDates(
+  //   startDate,
+  //   endDate,
+  // ): Promise<number> {
+  //   return await this.userRepository.count({
+  //     where: {
+  //       firementDate: Between(startDate, endDate),
+  //       role: In([Role.HR, Role.USER]),
+  //     },
+  //   });
+  // }
 
   async countOfEmployedInCurrentMonth(): Promise<number> {
-    return this._getCountsOfEmployedBetweenTwoDates(
+    return this._getCountsBetweenTwoDates(
       new Date(this._currYear, this._currMonth, 1),
       new Date(this._currYear, this._currMonth, this._currDay),
+      'employmentDate',
     );
   }
 
   async countOfEmployedInCurrentYear(): Promise<number> {
-    return this._getCountsOfEmployedBetweenTwoDates(
+    return this._getCountsBetweenTwoDates(
       new Date(this._currYear, 0, 1),
       new Date(this._currYear, this._currMonth, this._currDay),
+      'employmentDate',
     );
   }
 
   async countOfFiredInCurrentYear(): Promise<number> {
-    return this._getCountsOfFiredBetweenTwoDates(
+    return this._getCountsBetweenTwoDates(
       new Date(this._currYear, 0, 1),
       new Date(this._currYear, this._currMonth, this._currDay, 23, 59),
+      'firementDate',
     );
   }
 
   async countOfFiredInCurrentMonth(): Promise<number> {
-    return this._getCountsOfFiredBetweenTwoDates(
+    return this._getCountsBetweenTwoDates(
       new Date(this._currYear, this._currMonth, 1),
       new Date(this._currYear, this._currMonth, this._currDay, 23, 59),
+      'firementDate',
     );
   }
 
