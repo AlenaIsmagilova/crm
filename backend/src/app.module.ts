@@ -20,8 +20,8 @@ import configs from './config/configuration';
     TemporaryUsersModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      // host: 'postgres',
-      host: 'localhost',
+      host: 'postgres',
+      // host: 'localhost',
       port: 5432,
       username: 'alena_1',
       password: 'alena_1',
