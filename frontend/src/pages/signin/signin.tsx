@@ -87,6 +87,7 @@ const SignIn = ({
           <div className={styles.inputWrapper}>
             <input
               name="password"
+              type="password"
               className={styles.input}
               placeholder={"Пароль"}
               onChange={handleChange}

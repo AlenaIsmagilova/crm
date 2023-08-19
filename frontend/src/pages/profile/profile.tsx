@@ -106,12 +106,12 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.buttonWrapper}>
-        {currentUser.role !== "USER" && (
+        {currentUser.role !== RoleEnum.USER && (
           <Link to="/create-new-user" className={styles.link}>
             Создать нового пользователя
           </Link>
         )}
-        {currentUser.role === "HR" && (
+        {currentUser.role === RoleEnum.HR && (
           <Link to="/metrics" className={styles.link}>
             Посмотреть данные по компании
           </Link>
@@ -140,172 +140,199 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
         <p>Заработная плата: {currentUser.salary} руб.</p>
         <p>Имя пользователя для входа в систему: {currentUser.username} </p>
       </div>
-      <ul className={styles.list}>
-        {allUsers
-          .filter((user) => user.role !== "SUPERADMIN")
-          .map((user) => (
-            <li className={styles.itemsList} key={user.id}>
-              {userIdEditMode === user.id ? (
-                <form className={styles.form} onSubmit={handleEditUserSubmit}>
-                  <div className={styles.inputWrapper}>
-                    <label className={styles.label} htmlFor="name">
-                      Имя:
-                      <input
-                        name="firstName"
-                        id="name"
-                        className={styles.input}
-                        placeholder="Имя"
-                        onChange={handleChange}
-                        value={editedUserValues.firstName}
-                      />
-                    </label>
-                  </div>
-                  <div className={styles.inputWrapper}>
-                    <label className={styles.label} htmlFor="lastname">
-                      Фамилия:
-                      <input
-                        name="lastName"
-                        id="lastname"
-                        className={styles.input}
-                        placeholder="Фамилия"
-                        onChange={handleChange}
-                        value={editedUserValues.lastName}
-                      />
-                    </label>
-                  </div>
-                  <div className={styles.inputWrapper}>
-                    <label className={styles.label} htmlFor="fathername">
-                      Отчество:
-                      <input
-                        name="fatherName"
-                        id="fathername"
-                        className={styles.input}
-                        placeholder="Отчество"
-                        onChange={handleChange}
-                        value={editedUserValues.fatherName}
-                      />
-                    </label>
-                  </div>
-                  <div className={styles.inputWrapper}>
-                    <label className={styles.label} htmlFor="bday">
-                      Дата рождения:
-                      <input
-                        type="date"
-                        id="bday"
-                        name="birthDate"
-                        className={styles.input}
-                        placeholder="Дата рождения"
-                        onChange={handleChange}
-                        value={moment(editedUserValues.birthDate).format(
-                          "YYYY-MM-DD"
-                        )}
-                      />
-                    </label>
-                  </div>
-                  <div className={styles.inputWrapper}>
-                    <label className={styles.label} htmlFor="emplDate">
-                      Дата трудоустройства
-                      <input
-                        type="date"
-                        id="emplDate"
-                        name="employmentDate"
-                        className={styles.input}
-                        placeholder="Дата трудоустройства"
-                        onChange={handleChange}
-                        value={moment(editedUserValues.employmentDate).format(
-                          "YYYY-MM-DD"
-                        )}
-                      />
-                    </label>
-                  </div>
-                  <div className={styles.inputWrapper}>
-                    <label className={styles.label} htmlFor="position">
-                      Должность:
-                      <input
-                        name="position"
-                        id="position"
-                        className={styles.input}
-                        placeholder="Должность"
-                        onChange={handleChange}
-                        value={editedUserValues.position}
-                      />
-                    </label>
-                  </div>
-                  <div className={styles.inputWrapper}>
-                    <input
-                      name="salary"
-                      className={styles.input}
-                      placeholder="Заработная плата"
-                      onChange={handleChange}
-                      value={editedUserValues.salary}
-                    />
-                  </div>
-                  <div className={styles.inputWrapper}>
-                    <select
-                      className={styles.select}
-                      name="role"
-                      value={editedUserValues.role}
-                      onChange={handleChange}
-                    >
-                      <option value={RoleEnum.USER}>Сотрудник</option>
-                      <option value={RoleEnum.HR}>HR-специалист</option>
-                    </select>
-                  </div>
-                  <div className={styles.buttonWrapper}>
-                    <button className={styles.button} type="submit">
-                      Сохранить
-                    </button>
-                    <button
-                      className={styles.button}
-                      type="button"
-                      onClick={handleCancelEditClick}
-                    >
-                      Отменить
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                <>
+      <form
+        id="editForm"
+        className={styles.form}
+        onSubmit={handleEditUserSubmit}
+      ></form>
+      <table>
+        <thead>
+          <tr>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Отчество</th>
+            <th>Дата рождения</th>
+            <th>Дата трудоустройства</th>
+            <th>Должность</th>
+            <th>Заработная плата</th>
+            {currentUser.role !== RoleEnum.USER && <th></th>}
+          </tr>
+        </thead>
+        <tbody>
+          {allUsers
+            .filter((user) => user.role !== "SUPERADMIN")
+            .map((user) => (
+              <tr className={styles.itemsList} key={user.id}>
+                {userIdEditMode === user.id ? (
                   <>
-                    <p className={styles.desc}>Имя: {user.firstName}</p>
-                    <p className={styles.desc}>Фамилия: {user.lastName}</p>
-                    <p className={styles.desc}>Отчество: {user.fatherName}</p>
-                    <p className={styles.desc}>
-                      Дата рождения:&nbsp;
-                      {moment(user.birthDate).format("DD.MM.YYYY г.")}
-                    </p>
-                    <p className={styles.desc}>
-                      Дата трудоустройства:&nbsp;
-                      {moment(user.employmentDate).format("DD.MM.YYYY г.")}
-                    </p>
-                    <p className={styles.desc}>Должность: {user.position}</p>
-                    <p className={styles.desc}>
-                      Заработная плата: {user.salary} руб.
-                    </p>
+                    <td>
+                      <div className={styles.inputWrapper}>
+                        <label className={styles.label} htmlFor="name">
+                          <input
+                            form="editForm"
+                            name="firstName"
+                            id="name"
+                            className={styles.input}
+                            placeholder="Имя"
+                            onChange={handleChange}
+                            value={editedUserValues.firstName}
+                          />
+                        </label>
+                      </div>
+                    </td>
+                    <td>
+                      <div className={styles.inputWrapper}>
+                        <label className={styles.label} htmlFor="lastname">
+                          <input
+                            form="editForm"
+                            name="lastName"
+                            id="lastname"
+                            className={styles.input}
+                            placeholder="Фамилия"
+                            onChange={handleChange}
+                            value={editedUserValues.lastName}
+                          />
+                        </label>
+                      </div>
+                    </td>
+                    <td>
+                      <div className={styles.inputWrapper}>
+                        <label className={styles.label} htmlFor="fathername">
+                          <input
+                            form="editForm"
+                            name="fatherName"
+                            id="fathername"
+                            className={styles.input}
+                            placeholder="Отчество"
+                            onChange={handleChange}
+                            value={editedUserValues.fatherName}
+                          />
+                        </label>
+                      </div>
+                    </td>
+                    <td>
+                      <div className={styles.inputWrapper}>
+                        <label className={styles.label} htmlFor="bday">
+                          <input
+                            form="editForm"
+                            type="date"
+                            id="bday"
+                            name="birthDate"
+                            className={styles.input}
+                            placeholder="Дата рождения"
+                            onChange={handleChange}
+                            value={moment(editedUserValues.birthDate).format(
+                              "YYYY-MM-DD"
+                            )}
+                          />
+                        </label>
+                      </div>
+                    </td>
+                    <td>
+                      <div className={styles.inputWrapper}>
+                        <label className={styles.label} htmlFor="emplDate">
+                          <input
+                            form="editForm"
+                            type="date"
+                            id="emplDate"
+                            name="employmentDate"
+                            className={styles.input}
+                            placeholder="Дата трудоустройства"
+                            onChange={handleChange}
+                            value={moment(
+                              editedUserValues.employmentDate
+                            ).format("YYYY-MM-DD")}
+                          />
+                        </label>
+                      </div>
+                    </td>
+                    <td>
+                      <div className={styles.inputWrapper}>
+                        <label className={styles.label} htmlFor="position">
+                          <input
+                            form="editForm"
+                            name="position"
+                            id="position"
+                            className={styles.input}
+                            placeholder="Должность"
+                            onChange={handleChange}
+                            value={editedUserValues.position}
+                          />
+                        </label>
+                      </div>
+                    </td>
+                    <td>
+                      <div className={styles.inputWrapper}>
+                        <input
+                          form="editForm"
+                          name="salary"
+                          className={styles.input}
+                          placeholder="Заработная плата"
+                          onChange={handleChange}
+                          value={editedUserValues.salary}
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        className={`${styles.buttonWrapper} ${styles.flexColumn}`}
+                      >
+                        <button
+                          className={styles.button}
+                          type="submit"
+                          form="editForm"
+                        >
+                          Сохранить
+                        </button>
+                        <button
+                          className={styles.button}
+                          type="button"
+                          onClick={handleCancelEditClick}
+                        >
+                          Отменить
+                        </button>
+                      </div>
+                    </td>
                   </>
-                  {currentUser.role !== "USER" && (
+                ) : (
+                  <>
                     <>
-                      <button
-                        className={styles.button}
-                        type="button"
-                        onClick={(e) => handleEditUserClick(e, user)}
-                      >
-                        Редактировать
-                      </button>
-                      <button
-                        className={styles.button}
-                        type="button"
-                        onClick={(e) => handleFirementUserClick(e, user)}
-                      >
-                        Уволить
-                      </button>
+                      <td className={styles.desc}>{user.firstName}</td>
+                      <td className={styles.desc}>{user.lastName}</td>
+                      <td className={styles.desc}>{user.fatherName}</td>
+                      <td className={styles.desc}>
+                        {moment(user.birthDate).format("DD.MM.YYYY г.")}
+                      </td>
+                      <td className={styles.desc}>
+                        {moment(user.employmentDate).format("DD.MM.YYYY г.")}
+                      </td>
+                      <td className={styles.desc}>{user.position}</td>
+                      <td className={styles.desc}>{user.salary}</td>
                     </>
-                  )}
-                </>
-              )}
-            </li>
-          ))}
-      </ul>
+                    {currentUser.role !== "USER" && (
+                      <td>
+                        <button
+                          className={styles.button}
+                          type="button"
+                          onClick={(e) => handleEditUserClick(e, user)}
+                        >
+                          Редактировать
+                        </button>
+                        <button
+                          className={styles.button}
+                          type="button"
+                          onClick={(e) => handleFirementUserClick(e, user)}
+                        >
+                          Уволить
+                        </button>
+                      </td>
+                    )}
+                  </>
+                )}
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </div>
   );
 };
