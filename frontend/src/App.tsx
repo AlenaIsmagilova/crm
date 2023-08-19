@@ -1,20 +1,19 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import CreateUser from "./pages/create-user/create-user";
 import SignIn from "./pages/signin/signin";
 import SignUp from "./pages/signup/signup";
 import Profile from "./pages/profile/profile";
-import Loader from "./components/loader";
+import Loader from "./components/loader/loader";
 import { getUser } from "./utils/api/api";
 import Metrics from "./pages/metrics/metrics";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const [loader, setLoader] = useState(false);
-  const navigate = useNavigate();
 
   const token = localStorage.getItem("access_token");
 

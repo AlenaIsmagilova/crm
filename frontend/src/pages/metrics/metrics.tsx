@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
 import {
   getBirthdayPeopleApi,
@@ -5,15 +6,52 @@ import {
   getCountOfEmployedInYearApi,
   getCountOfFiredInMonthApi,
   getCountOfFiredInYearApi,
+  getExpectedSalaryPaymentsApi,
 } from "../../utils/api/api";
+import { CategoryScale } from "chart.js";
+import Chart from "chart.js/auto";
+import LineChart from "../../components/line-chart/line-chart";
 
-const Metrics = ({ isLoggedIn }: any) => {
+Chart.register(CategoryScale);
+
+interface IMetricsProps {
+  isLoggedIn: boolean;
+}
+
+const Metrics = ({ isLoggedIn }: IMetricsProps) => {
   const [countEmployedInCurrentMonth, setCountEmployedInCurrentMonth] =
     useState("");
   const [countEmployedInCurrentYear, setCountEmployedInCurrentYear] =
     useState("");
   const [countFiredInCurrentMonth, setCountFiredInCurrentMonth] = useState("");
   const [countFiredInCurrentYear, setCountFiredInCurrentYear] = useState("");
+  const [expectedSalaryPayments, setExpectedSalaryPayments] = useState();
+
+  const data = {
+    labels: [
+      "Январь",
+      "Февраль",
+      "Март",
+      "Апрель",
+      "Май",
+      "Июнь",
+      "Июль",
+      "Август",
+      "Сентябрь",
+      "Октябрь",
+      "Ноябрь",
+      "Декабрь",
+    ],
+    datasets: [
+      {
+        label: "Сумма,руб.",
+        data: expectedSalaryPayments,
+        borderColor: "black",
+        borderWidth: 2,
+      },
+    ],
+  };
+
   const [birthdayPeopleList, setBirthdayPeopleList] = useState([
     { firstName: "", lastName: "", birthDate: "", id: "" },
   ]);
@@ -32,7 +70,10 @@ const Metrics = ({ isLoggedIn }: any) => {
       getCountOfFiredInYearApi().then((res) => setCountFiredInCurrentYear(res));
       getBirthdayPeopleApi().then((res) => {
         setBirthdayPeopleList(res);
+      });
+      getExpectedSalaryPaymentsApi().then((res) => {
         console.log(res);
+        setExpectedSalaryPayments(res);
       });
     }
   }, []);
@@ -55,15 +96,24 @@ const Metrics = ({ isLoggedIn }: any) => {
         Количество сотрудников, уволенных в текущем году:&nbsp;
         {countFiredInCurrentYear}
       </p>
+      <LineChart chartData={data} />
       <ul>
-        В этом месяце день рождения отмечают:&nbsp;
-        {birthdayPeopleList.map((el) => (
-          <li key={el.id}>
-            <p>Имя: {el.firstName}</p>
-            <p>Фамилия: {el.lastName}</p>
-            <p>Дата рождения: {el.birthDate}</p>
-          </li>
-        ))}
+        {birthdayPeopleList.length !== 0 ? (
+          <>
+            <p>В этом месяце день рождения отмечают:&nbsp;</p>
+            {birthdayPeopleList.map((el) => (
+              <li key={el.id}>
+                <p>Имя: {el.firstName}</p>
+                <p>Фамилия: {el.lastName}</p>
+                <p>
+                  Дата рождения: {moment(el.birthDate).format("DD.MM.YYYY г.")}
+                </p>
+              </li>
+            ))}
+          </>
+        ) : (
+          <p>В этом месяце дней рождений нет</p>
+        )}
       </ul>
     </>
   );

@@ -18,7 +18,6 @@ export class UsersService {
   ) {}
 
   public onModuleInit(): void {
-    console.log(1);
     this._createSuperAdmin();
   }
 
@@ -71,7 +70,11 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.find({
+      where: {
+        isFired: false,
+      },
+    });
 
     if (users.length === 0) {
       throw new UnauthorizedException();
@@ -86,31 +89,35 @@ export class UsersService {
   }
 
   async findByUsername(username: string): Promise<User> {
-    const user = await this.userRepository.findOneBy({ username });
+    // const user = await this.userRepository.findOneBy({ username });
 
-    return user;
+    // return user;
+
+    return this.userRepository
+      .createQueryBuilder()
+      .select('user')
+      .from(User, 'user')
+      .where(`user.username = :username`, { username })
+      .addSelect('user.password')
+      .getOne();
   }
 
-  async updateOne(id: number, updateUserDto: UpdateUserDto): Promise<any> {
-    const user = await this.userRepository.findOneBy({ id });
+  async updateOne(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    await this.userRepository.findOneBy({ id });
 
     await this.userRepository.update(updateUserDto.id, updateUserDto);
     return await this.userRepository.findOneBy({ id });
   }
 
-  // async remove(id: number, updateUserDto: UpdateUserDto): Promise<string> {
-  //   await this.userRepository.delete(updateUserDto.id);
-  //   return 'Пользователь удалён';
-  // }
-
   async updateOneAfterFired(id: number): Promise<User> {
-    const user = await this.userRepository.findOneBy({ id });
+    await this.userRepository.findOneBy({ id });
 
     await this.userRepository.update(id, {
       isFired: true,
       firementDate: new Date(),
     });
 
+    console.log(await this.userRepository.findOneBy({ id }));
     return await this.userRepository.findOneBy({ id });
   }
 }

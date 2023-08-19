@@ -27,8 +27,8 @@ export class UsersController {
   @UseGuards(JwtGuard)
   @Get('me')
   async findMe(@Req() req): Promise<User> {
-    const { password, ...result } = req.user;
-    return result;
+    // const { password, ...result } = req.user;
+    return req.user;
   }
 
   @UseGuards(JwtGuard)

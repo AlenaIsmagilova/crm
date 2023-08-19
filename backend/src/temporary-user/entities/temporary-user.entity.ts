@@ -10,7 +10,7 @@ import { Role } from '../../types/role.enum';
 @Entity()
 export class TemporaryUser {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({ unique: true })
   username: string;
@@ -40,8 +40,8 @@ export class TemporaryUser {
   role: Role;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt?: Date;
 }

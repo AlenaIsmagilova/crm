@@ -1,25 +1,27 @@
 version: "3"
 
 services:
-  #   backend:
-  #     build:
-  #       context: ./backend
-  #       dockerfile: Dockerfile
-  #     image: backend
-  #     depends_on:
-  #       - postgres
-  #     ports:
-  #       - "3000:5000"
-  #     restart: unless-stopped
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   image: backend-docker
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "5000:5000"
+  #   restart: unless-stopped
 
-  #   frontend:
-  #     build:
-  #       context: ./frontend
-  #       dockerfile: Dockerfile
-  #     image: frontend
-  #     ports:
-  #       - "8081:80"
-  #     restart: unless-stopped
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   image: frontend-docker
+  #   depends_on:
+  #     - backend
+  #   ports:
+  #     - "3000:80"
+  #   restart: unless-stopped
 
   postgres:
     image: postgres:15.3-alpine
@@ -32,14 +34,15 @@ services:
       - POSTGRES_PASSWORD=alena_1
       - POSTGRES_USER=alena_1
       - POSTGRES_DB=nest_project_1
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
-    restart: always
-    ports:
-      - "8888:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
-      PGADMIN_DEFAULT_PASSWORD: password
-    volumes:
-      - ./pg-data:/var/lib/postgresql/testtask/pgadmin
+
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin4_container
+  #   restart: always
+  #   ports:
+  #     - "8888:80"
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+  #     PGADMIN_DEFAULT_PASSWORD: password
+  #   volumes:
+  #     - ./pg-data:/var/lib/postgresql/testtask/pgadmin

@@ -19,8 +19,20 @@ export interface ISignInForm {
   password: string;
 }
 
-export enum Role {
+export enum RoleEnum {
   SUPERADMIN = "SUPERADMIN",
   USER = "USER",
   HR = "HR",
+}
+
+export interface IUser {
+  id?: number;
+  firstName: string;
+  lastName: string;
+  fatherName: string;
+  birthDate: string;
+  employmentDate: string;
+  position: string;
+  salary: number;
+  role: string; // Role enum
 }

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { FC } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { IUser } from "../../helpers/types";
 import { getCurrentTemporaryUserApi, signUpApi } from "../../utils/api/api";
 import styles from "./signup.module.css";
 
@@ -10,15 +10,15 @@ type TParams = {
 
 interface ISignUpProps {
   isLoggedIn: boolean;
-  setIsLoggedIn: any;
-  setCurrentUser: any;
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+  setCurrentUser: Dispatch<SetStateAction<IUser>>;
 }
 
-const SignUp: FC<ISignUpProps> = ({
+const SignUp = ({
   isLoggedIn,
   setIsLoggedIn,
   setCurrentUser,
-}) => {
+}: ISignUpProps) => {
   const [values, setValues] = useState({
     password: "",
   });
@@ -45,15 +45,9 @@ const SignUp: FC<ISignUpProps> = ({
   useEffect(() => {
     if (!isLoggedIn) {
       getCurrentTemporaryUserApi(params.username as string)
-        // .then((res) => {
-        //   if (res.ok) {
-        //     return res.json();
-        //   }
-        //   return Promise.reject(res);
-        // })
         .then((user) => setTempUser(user))
         .catch((error) => {
-          error.json().then((data: any) => {
+          error.json().then((data: Error) => {
             setErrorInUsername(true);
             setErrorText(data.message);
           });

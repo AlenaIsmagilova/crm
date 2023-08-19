@@ -49,9 +49,15 @@ export class StatisticsController {
     throw new ForbiddenException('У вас нет прав на просмотр данных');
   }
 
-  // @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard)
   @Post('birthday-people')
   findAllBirthdayPeople() {
     return this.statisticsService.birthDateInCurrentMonth();
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('expected-salary-payments')
+  findAllSalaryPayments() {
+    return this.statisticsService.expectedSalaryPayments();
   }
 }

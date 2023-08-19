@@ -24,6 +24,7 @@ export class AuthService {
 
   async validatePassword(username: string, pass: string): Promise<User> {
     const user = await this.userService.findByUsername(username);
+
     if (!user) {
       throw new NotFoundException('Пользователя не существует');
     }

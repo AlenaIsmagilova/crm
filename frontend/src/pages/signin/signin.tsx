@@ -1,29 +1,30 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { signInApi } from '../../utils/api/api';
-import styles from './signin.module.css';
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { IUser } from "../../helpers/types";
+import { signInApi } from "../../utils/api/api";
+import styles from "./signin.module.css";
 
 interface ISignInProps {
   isLoggedIn: boolean;
-  setIsLoggedIn: any;
-  setCurrentUser: any;
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+  setCurrentUser: Dispatch<SetStateAction<IUser>>;
 }
 
-const SignIn: FC<ISignInProps> = ({
+const SignIn = ({
   isLoggedIn,
   setIsLoggedIn,
   setCurrentUser,
-}): JSX.Element => {
+}: ISignInProps) => {
   const [values, setValues] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
   const [notFoundUser, setNotFoundUser] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate({ pathname: '/' });
+      navigate({ pathname: "/" });
     }
   }, [isLoggedIn, navigate]);
 
@@ -37,10 +38,10 @@ const SignIn: FC<ISignInProps> = ({
     e.preventDefault();
     signInApi(values)
       .then((data) => {
-        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem("access_token", data.access_token);
         setIsLoggedIn(true);
         setCurrentUser(data.user);
-        navigate('/');
+        navigate("/");
       })
       .catch((error) => {
         error.json().then(() => {
@@ -53,8 +54,8 @@ const SignIn: FC<ISignInProps> = ({
     e.preventDefault();
     setNotFoundUser(false);
     setValues({
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     });
   };
 
@@ -65,7 +66,7 @@ const SignIn: FC<ISignInProps> = ({
           <p>Данного юзера не существует</p>
           <button
             className={styles.button}
-            type='button'
+            type="button"
             onClick={handlePrevStepClick}
           >
             Вернуться назад
@@ -76,24 +77,24 @@ const SignIn: FC<ISignInProps> = ({
           <h2 className={styles.title}>Вход</h2>
           <div className={styles.inputWrapper}>
             <input
-              name='username'
+              name="username"
               className={styles.input}
-              placeholder={'Имя пользователя'}
+              placeholder={"Имя пользователя"}
               onChange={handleChange}
               value={values.username}
             />
           </div>
           <div className={styles.inputWrapper}>
             <input
-              name='password'
+              name="password"
               className={styles.input}
-              placeholder={'Пароль'}
+              placeholder={"Пароль"}
               onChange={handleChange}
               value={values.password}
             />
           </div>
           <div className={styles.buttonWrapper}>
-            <button className={styles.button} type='submit'>
+            <button className={styles.button} type="submit">
               Войти
             </button>
           </div>

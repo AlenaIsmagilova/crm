@@ -31,9 +31,10 @@ export class AuthController {
   async signup(@Body() registrationDto: RegistrationDto): Promise<{
     access_token: string;
   }> {
-    const tempUser = await this.temporaryUsersService.findUserByUsername(
-      registrationDto.username,
-    );
+    const { id, createdAt, updatedAt, ...tempUser } =
+      await this.temporaryUsersService.findUserByUsername(
+        registrationDto.username,
+      );
 
     if (!tempUser) {
       throw new NotFoundException(

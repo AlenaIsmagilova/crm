@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { Role } from 'src/types/role.enum';
-import { IUsername } from 'src/types/username';
+import { IUsername } from 'src/types/types';
 import { CreateTemporaryUserDto } from './dto/create-temporary-user.dto';
 import { TemporaryUser } from './entities/temporary-user.entity';
 import { TemporaryUsersService } from './temporary-users.service';

@@ -148,3 +148,13 @@ export const getBirthdayPeopleApi = () => {
     } as HeadersInit,
   }).then(handleResponse);
 };
+
+export const getExpectedSalaryPaymentsApi = () => {
+  return fetch(`${API.baseUrl}/users/statistics/expected-salary-payments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    } as HeadersInit,
+  }).then(handleResponse);
+};

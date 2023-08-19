@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState, Dispatch } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   getUsers,
@@ -6,20 +6,16 @@ import {
   updateUserApi,
 } from "../../utils/api/api";
 import styles from "./profile.module.css";
+import moment from "moment";
+import { IUser, RoleEnum } from "../../helpers/types";
 
-interface IUser {
-  id?: number;
-  firstName: string;
-  lastName: string;
-  fatherName: string;
-  birthDate: string;
-  employmentDate: string;
-  position: string;
-  salary: number;
-  role: string; // Role enum
+interface IProfileProps {
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+  currentUser: IUser;
+  isLoggedIn: boolean;
 }
 
-const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
+const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
   const [allUsers, setAllUsers] = useState<IUser[]>([]);
   const [editedUserValues, setEditedUserValues] = useState({
     firstName: "",
@@ -64,20 +60,22 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
 
   const handleEditUserClick = (
     e: React.MouseEvent<HTMLButtonElement>,
-    user: any
+    user: IUser
   ) => {
     e.preventDefault();
-    setUserIdEditMode(user.id);
+    setUserIdEditMode(user.id!);
     setEditedUserValues(user);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     e.preventDefault();
     const { value, name } = e.target;
     setEditedUserValues({ ...editedUserValues, [name]: value });
   };
 
-  const updateAllUsers = (user: any) => {
+  const updateAllUsers = (user: IUser) => {
     const copyOfArray = [...allUsers];
     const indexOfUser = copyOfArray.findIndex((el) => el.id === user.id);
     copyOfArray.splice(indexOfUser, 1, user);
@@ -97,10 +95,12 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
 
   const handleFirementUserClick = (
     e: React.MouseEvent<HTMLButtonElement>,
-    user: any
+    user: IUser
   ) => {
     e.preventDefault();
-    updateUserAfterFirementApi(user.id).then((user) => updateAllUsers(user));
+    updateUserAfterFirementApi(user.id!).then((user) =>
+      setAllUsers(allUsers.filter((u) => u.id !== user.id))
+    );
   };
 
   return (
@@ -110,9 +110,13 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
         <p>Имя: {currentUser.firstName}</p>
         <p>Фамилия: {currentUser.lastName}</p>
         <p>Отчество: {currentUser.fatherName}</p>
-        <p>Дата рождения: {currentUser.birthDate}</p>
-        <p>Дата трудоустройства:</p>
-        <p>{currentUser.employmentDate.toLocaleString()}</p>
+        <p>
+          Дата рождения: {moment(currentUser.birthDate).format("DD.MM.YYYY г.")}
+        </p>
+        <p>
+          Дата трудоустройства:{" "}
+          {moment(currentUser.employmentDate).format("DD.MM.YYYY г.")}
+        </p>
         <p>Должность: {currentUser.position}</p>
         <p>Заработная плата: {currentUser.salary} руб.</p>
       </div>
@@ -131,12 +135,11 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
             <li className={styles.itemsList} key={user.id}>
               {userIdEditMode === user.id ? (
                 <form className={styles.form} onSubmit={handleEditUserSubmit}>
-                  <h2 className={styles.title}>Создание пользователя</h2>
                   <div className={styles.inputWrapper}>
                     <input
                       name="firstName"
                       className={styles.input}
-                      placeholder={"Имя"}
+                      placeholder="Имя"
                       onChange={handleChange}
                       value={editedUserValues.firstName}
                     />
@@ -145,7 +148,7 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
                     <input
                       name="lastName"
                       className={styles.input}
-                      placeholder={"Фамилия"}
+                      placeholder="Фамилия"
                       onChange={handleChange}
                       value={editedUserValues.lastName}
                     />
@@ -154,36 +157,43 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
                     <input
                       name="fatherName"
                       className={styles.input}
-                      placeholder={"Отчество"}
+                      placeholder="Отчество"
                       onChange={handleChange}
                       value={editedUserValues.fatherName}
                     />
                   </div>
                   <div className={styles.inputWrapper}>
-                    <input
-                      type="date"
-                      name="birthDate"
-                      className={styles.input}
-                      placeholder={"Дата рождения"}
-                      onChange={handleChange}
-                      value={editedUserValues.birthDate}
-                    />
+                    <label htmlFor="bday">
+                      <input
+                        type="date"
+                        id="bday"
+                        name="birthDate"
+                        className={styles.input}
+                        placeholder="Дата рождения"
+                        onChange={handleChange}
+                        value={moment(editedUserValues.birthDate).format(
+                          "YYYY-MM-DD"
+                        )}
+                      />
+                    </label>
                   </div>
                   <div className={styles.inputWrapper}>
                     <input
                       type="date"
                       name="employmentDate"
                       className={styles.input}
-                      placeholder={"Дата трудоустройства"}
+                      placeholder="Дата трудоустройства"
                       onChange={handleChange}
-                      value={editedUserValues.employmentDate}
+                      value={moment(editedUserValues.employmentDate).format(
+                        "YYYY-MM-DD"
+                      )}
                     />
                   </div>
                   <div className={styles.inputWrapper}>
                     <input
                       name="position"
                       className={styles.input}
-                      placeholder={"Должность"}
+                      placeholder="Должность"
                       onChange={handleChange}
                       value={editedUserValues.position}
                     />
@@ -192,19 +202,20 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
                     <input
                       name="salary"
                       className={styles.input}
-                      placeholder={"Заработная плата"}
+                      placeholder="Заработная плата"
                       onChange={handleChange}
                       value={editedUserValues.salary}
                     />
                   </div>
                   <div className={styles.inputWrapper}>
-                    <input
+                    <select
                       name="role"
-                      className={styles.input}
-                      placeholder={"Роль в организации"}
-                      onChange={handleChange}
                       value={editedUserValues.role}
-                    />
+                      onChange={handleChange}
+                    >
+                      <option value={RoleEnum.USER}>Сотрудник</option>
+                      <option value={RoleEnum.HR}>HR-специалист</option>
+                    </select>
                   </div>
                   <div className={styles.buttonWrapper}>
                     <button className={styles.button} type="submit">
@@ -225,8 +236,14 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: any) => {
                     <p>Имя: {user.firstName}</p>
                     <p>Фамилия: {user.lastName}</p>
                     <p>Отчество: {user.fatherName}</p>
-                    <p>Дата рождения: {user.birthDate}</p>
-                    <p>Дата трудоустройства: {user.employmentDate}</p>
+                    <p>
+                      Дата рождения:
+                      {moment(user.birthDate).format("DD.MM.YYYY г.")}
+                    </p>
+                    <p>
+                      Дата трудоустройства:
+                      {moment(user.employmentDate).format("DD.MM.YYYY г.")}
+                    </p>
                     <p>Должность: {user.position}</p>
                     <p>Заработная плата: {user.salary} руб.</p>
                   </div>

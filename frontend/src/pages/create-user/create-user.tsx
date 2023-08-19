@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { FC } from "react";
 import { useNavigate } from "react-router-dom";
+import { RoleEnum } from "../../helpers/types";
 import { createTemporaryUserApi } from "../../utils/api/api";
 import styles from "./create-user.module.css";
 
-const CreateUser: FC = () => {
+const CreateUser = () => {
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
@@ -13,13 +13,15 @@ const CreateUser: FC = () => {
     birthDate: "",
     position: "",
     salary: 0,
-    role: "",
+    role: "default",
   });
   const [username, setUsername] = useState("");
 
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     e.preventDefault();
     const { value, name } = e.target;
     setValues({ ...values, [name]: value });
@@ -68,24 +70,32 @@ const CreateUser: FC = () => {
             />
           </div>
           <div className={styles.inputWrapper}>
-            <input
-              type="date"
-              name="birthDate"
-              className={styles.input}
-              placeholder={"Дата рождения"}
-              onChange={handleChange}
-              value={values.birthDate}
-            />
+            <label className={styles.label} htmlFor="bday">
+              Дата рождения:&nbsp;
+              <input
+                type="date"
+                id="bday"
+                name="birthDate"
+                className={styles.input}
+                placeholder={"Дата рождения"}
+                onChange={handleChange}
+                value={values.birthDate}
+              />
+            </label>
           </div>
           <div className={styles.inputWrapper}>
-            <input
-              type="date"
-              name="employmentDate"
-              className={styles.input}
-              placeholder={"Дата трудоустройства"}
-              onChange={handleChange}
-              value={values.employmentDate}
-            />
+            <label className={styles.label} htmlFor="emplDate">
+              Дата трудоустройства:&nbsp;
+              <input
+                id="emplDate"
+                type="date"
+                name="employmentDate"
+                className={styles.input}
+                placeholder={"Дата трудоустройства"}
+                onChange={handleChange}
+                value={values.employmentDate}
+              />
+            </label>
           </div>
           <div className={styles.inputWrapper}>
             <input
@@ -106,13 +116,13 @@ const CreateUser: FC = () => {
             />
           </div>
           <div className={styles.inputWrapper}>
-            <input
-              name="role"
-              className={styles.input}
-              placeholder={"Роль в организации"}
-              onChange={handleChange}
-              value={values.role}
-            />
+            <select name="role" value={values.role} onChange={handleChange}>
+              <option value="default" disabled>
+                --Выберите роль сотрудника--
+              </option>
+              <option value={RoleEnum.USER}>Сотрудник</option>
+              <option value={RoleEnum.HR}>HR-специалист</option>
+            </select>
           </div>
           <div className={styles.buttonWrapper}>
             <button className={styles.button} type="submit">
