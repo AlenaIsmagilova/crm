@@ -14,6 +14,7 @@
   justify-content: center;
   max-width: 400px;
   align-items: center;
+  margin: auto;
 }
 
 .link {
@@ -35,6 +36,7 @@
   align-items: center;
   min-width: 200px;
   min-height: 100px;
+  margin: auto;
 }
 
 .button {
@@ -65,5 +67,14 @@
 .label {
   display: flex;
   flex-direction: column;
-  margin: 12px 0 0;
+}
+
+.select {
+  padding: 5px 15px;
+  background-color: #fff;
+  border: 2px solid black;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  min-height: 38px;
+  min-width: 233px;
 }

@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -7,7 +6,7 @@ import SignIn from "./pages/signin/signin";
 import SignUp from "./pages/signup/signup";
 import Profile from "./pages/profile/profile";
 import Loader from "./components/loader/loader";
-import { getUser } from "./utils/api/api";
+import { getUserApi } from "./utils/api/api";
 import Metrics from "./pages/metrics/metrics";
 
 function App() {
@@ -20,7 +19,7 @@ function App() {
   useEffect(() => {
     if (token) {
       setLoader(true);
-      getUser()
+      getUserApi()
         .then((data) => {
           setIsLoggedIn(true);
           setCurrentUser(data);

@@ -28,7 +28,10 @@ export class StatisticsService {
     private userRepository: Repository<User>,
   ) {}
 
-  private async _getCountsBetweenTwoDates(startDate, endDate): Promise<number> {
+  private async _getCountsOfEmployedBetweenTwoDates(
+    startDate,
+    endDate,
+  ): Promise<number> {
     return await this.userRepository.count({
       where: {
         employmentDate: Between(startDate, endDate),
@@ -37,42 +40,44 @@ export class StatisticsService {
     });
   }
 
+  private async _getCountsOfFiredBetweenTwoDates(
+    startDate,
+    endDate,
+  ): Promise<number> {
+    return await this.userRepository.count({
+      where: {
+        firementDate: Between(startDate, endDate),
+        role: In([Role.HR, Role.USER]),
+      },
+    });
+  }
+
   async countOfEmployedInCurrentMonth(): Promise<number> {
-    return this._getCountsBetweenTwoDates(
+    return this._getCountsOfEmployedBetweenTwoDates(
       new Date(this._currYear, this._currMonth, 1),
       new Date(this._currYear, this._currMonth, this._currDay),
     );
   }
 
   async countOfEmployedInCurrentYear(): Promise<number> {
-    return this._getCountsBetweenTwoDates(
+    return this._getCountsOfEmployedBetweenTwoDates(
       new Date(this._currYear, 0, 1),
       new Date(this._currYear, this._currMonth, this._currDay),
     );
   }
 
   async countOfFiredInCurrentYear(): Promise<number> {
-    return this._getCountsBetweenTwoDates(
+    return this._getCountsOfFiredBetweenTwoDates(
       new Date(this._currYear, 0, 1),
       new Date(this._currYear, this._currMonth, this._currDay, 23, 59),
     );
   }
 
   async countOfFiredInCurrentMonth(): Promise<number> {
-    return this._getCountsBetweenTwoDates(
+    return this._getCountsOfFiredBetweenTwoDates(
       new Date(this._currYear, this._currMonth, 1),
       new Date(this._currYear, this._currMonth, this._currDay, 23, 59),
     );
-
-    // return await this.userRepository.count({
-    //   where: {
-    //     firementDate: Between(
-    //       new Date(currYear, currMonth, 1),
-    //       new Date(currYear, currMonth, currDay, 23, 59),
-    //     ),
-    //     role: In([Role.HR, Role.USER]),
-    //   },
-    // });
   }
 
   async birthDateInCurrentMonth(): Promise<IBirthDateUser[]> {

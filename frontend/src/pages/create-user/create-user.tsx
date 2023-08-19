@@ -71,7 +71,7 @@ const CreateUser = () => {
           </div>
           <div className={styles.inputWrapper}>
             <label className={styles.label} htmlFor="bday">
-              Дата рождения:&nbsp;
+              Дата рождения:
               <input
                 type="date"
                 id="bday"
@@ -85,7 +85,7 @@ const CreateUser = () => {
           </div>
           <div className={styles.inputWrapper}>
             <label className={styles.label} htmlFor="emplDate">
-              Дата трудоустройства:&nbsp;
+              Дата трудоустройства:
               <input
                 id="emplDate"
                 type="date"
@@ -116,7 +116,12 @@ const CreateUser = () => {
             />
           </div>
           <div className={styles.inputWrapper}>
-            <select name="role" value={values.role} onChange={handleChange}>
+            <select
+              className={styles.select}
+              name="role"
+              value={values.role}
+              onChange={handleChange}
+            >
               <option value="default" disabled>
                 --Выберите роль сотрудника--
               </option>

@@ -117,7 +117,6 @@ export class UsersService {
       firementDate: new Date(),
     });
 
-    console.log(await this.userRepository.findOneBy({ id }));
     return await this.userRepository.findOneBy({ id });
   }
 }

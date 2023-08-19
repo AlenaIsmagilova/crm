@@ -1,7 +1,7 @@
 import React, { SetStateAction, useEffect, useState, Dispatch } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  getUsers,
+  getUsersApi,
   updateUserAfterFirementApi,
   updateUserApi,
 } from "../../utils/api/api";
@@ -39,7 +39,7 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      getUsers()
+      getUsersApi()
         .then((users) => setAllUsers(users))
         .catch((err) => {
           navigate("/signin");
@@ -104,7 +104,26 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
   };
 
   return (
-    <div>
+    <div className={styles.mainContainer}>
+      <div className={styles.buttonWrapper}>
+        {currentUser.role !== "USER" && (
+          <Link to="/create-new-user" className={styles.link}>
+            Создать нового пользователя
+          </Link>
+        )}
+        {currentUser.role === "HR" && (
+          <Link to="/metrics" className={styles.link}>
+            Посмотреть данные по компании
+          </Link>
+        )}
+        <button
+          className={styles.button}
+          type="button"
+          onClick={handleExitClick}
+        >
+          Выйти из профиля
+        </button>
+      </div>
       <h2 className={styles.userTitle}>Информация о сотруднике</h2>
       <div className={styles.userDisc}>
         <p>Имя: {currentUser.firstName}</p>
@@ -119,15 +138,8 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
         </p>
         <p>Должность: {currentUser.position}</p>
         <p>Заработная плата: {currentUser.salary} руб.</p>
+        <p>Имя пользователя для входа в систему: {currentUser.username} </p>
       </div>
-      {currentUser.role !== "USER" && (
-        <p className={styles.disc}>
-          Хотите создать нового пользователя?
-          <Link to="/create-new-user" className={styles.link}>
-            &nbsp;Создать
-          </Link>
-        </p>
-      )}
       <ul className={styles.list}>
         {allUsers
           .filter((user) => user.role !== "SUPERADMIN")
@@ -136,34 +148,47 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
               {userIdEditMode === user.id ? (
                 <form className={styles.form} onSubmit={handleEditUserSubmit}>
                   <div className={styles.inputWrapper}>
-                    <input
-                      name="firstName"
-                      className={styles.input}
-                      placeholder="Имя"
-                      onChange={handleChange}
-                      value={editedUserValues.firstName}
-                    />
+                    <label className={styles.label} htmlFor="name">
+                      Имя:
+                      <input
+                        name="firstName"
+                        id="name"
+                        className={styles.input}
+                        placeholder="Имя"
+                        onChange={handleChange}
+                        value={editedUserValues.firstName}
+                      />
+                    </label>
                   </div>
                   <div className={styles.inputWrapper}>
-                    <input
-                      name="lastName"
-                      className={styles.input}
-                      placeholder="Фамилия"
-                      onChange={handleChange}
-                      value={editedUserValues.lastName}
-                    />
+                    <label className={styles.label} htmlFor="lastname">
+                      Фамилия:
+                      <input
+                        name="lastName"
+                        id="lastname"
+                        className={styles.input}
+                        placeholder="Фамилия"
+                        onChange={handleChange}
+                        value={editedUserValues.lastName}
+                      />
+                    </label>
                   </div>
                   <div className={styles.inputWrapper}>
-                    <input
-                      name="fatherName"
-                      className={styles.input}
-                      placeholder="Отчество"
-                      onChange={handleChange}
-                      value={editedUserValues.fatherName}
-                    />
+                    <label className={styles.label} htmlFor="fathername">
+                      Отчество:
+                      <input
+                        name="fatherName"
+                        id="fathername"
+                        className={styles.input}
+                        placeholder="Отчество"
+                        onChange={handleChange}
+                        value={editedUserValues.fatherName}
+                      />
+                    </label>
                   </div>
                   <div className={styles.inputWrapper}>
-                    <label htmlFor="bday">
+                    <label className={styles.label} htmlFor="bday">
+                      Дата рождения:
                       <input
                         type="date"
                         id="bday"
@@ -178,25 +203,33 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
                     </label>
                   </div>
                   <div className={styles.inputWrapper}>
-                    <input
-                      type="date"
-                      name="employmentDate"
-                      className={styles.input}
-                      placeholder="Дата трудоустройства"
-                      onChange={handleChange}
-                      value={moment(editedUserValues.employmentDate).format(
-                        "YYYY-MM-DD"
-                      )}
-                    />
+                    <label className={styles.label} htmlFor="emplDate">
+                      Дата трудоустройства
+                      <input
+                        type="date"
+                        id="emplDate"
+                        name="employmentDate"
+                        className={styles.input}
+                        placeholder="Дата трудоустройства"
+                        onChange={handleChange}
+                        value={moment(editedUserValues.employmentDate).format(
+                          "YYYY-MM-DD"
+                        )}
+                      />
+                    </label>
                   </div>
                   <div className={styles.inputWrapper}>
-                    <input
-                      name="position"
-                      className={styles.input}
-                      placeholder="Должность"
-                      onChange={handleChange}
-                      value={editedUserValues.position}
-                    />
+                    <label className={styles.label} htmlFor="position">
+                      Должность:
+                      <input
+                        name="position"
+                        id="position"
+                        className={styles.input}
+                        placeholder="Должность"
+                        onChange={handleChange}
+                        value={editedUserValues.position}
+                      />
+                    </label>
                   </div>
                   <div className={styles.inputWrapper}>
                     <input
@@ -209,6 +242,7 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
                   </div>
                   <div className={styles.inputWrapper}>
                     <select
+                      className={styles.select}
                       name="role"
                       value={editedUserValues.role}
                       onChange={handleChange}
@@ -232,21 +266,23 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
                 </form>
               ) : (
                 <>
-                  <div className={styles.card}>
-                    <p>Имя: {user.firstName}</p>
-                    <p>Фамилия: {user.lastName}</p>
-                    <p>Отчество: {user.fatherName}</p>
-                    <p>
-                      Дата рождения:
+                  <>
+                    <p className={styles.desc}>Имя: {user.firstName}</p>
+                    <p className={styles.desc}>Фамилия: {user.lastName}</p>
+                    <p className={styles.desc}>Отчество: {user.fatherName}</p>
+                    <p className={styles.desc}>
+                      Дата рождения:&nbsp;
                       {moment(user.birthDate).format("DD.MM.YYYY г.")}
                     </p>
-                    <p>
-                      Дата трудоустройства:
+                    <p className={styles.desc}>
+                      Дата трудоустройства:&nbsp;
                       {moment(user.employmentDate).format("DD.MM.YYYY г.")}
                     </p>
-                    <p>Должность: {user.position}</p>
-                    <p>Заработная плата: {user.salary} руб.</p>
-                  </div>
+                    <p className={styles.desc}>Должность: {user.position}</p>
+                    <p className={styles.desc}>
+                      Заработная плата: {user.salary} руб.
+                    </p>
+                  </>
                   {currentUser.role !== "USER" && (
                     <>
                       <button
@@ -270,23 +306,6 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
             </li>
           ))}
       </ul>
-      <div className={styles.buttonWrapper}>
-        <button
-          className={styles.button}
-          type="button"
-          onClick={handleExitClick}
-        >
-          Выйти из профиля
-        </button>
-        {currentUser.role === "HR" && (
-          <p className={styles.disc}>
-            Посмотреть данные по компании
-            <Link to="/metrics" className={styles.link}>
-              &nbsp;Статистика
-            </Link>
-          </p>
-        )}
-      </div>
     </div>
   );
 };

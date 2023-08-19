@@ -1,9 +1,10 @@
 import { Line } from "react-chartjs-2";
+import styles from "./line-chart.module.css";
 
 function LineChart({ chartData }: any) {
   const currentYear = new Date().getFullYear();
   return (
-    <div className="chart-container">
+    <div className={styles.mainContainer}>
       <h2 style={{ textAlign: "center" }}>
         Ожидаемые выплаты заработной платы
       </h2>

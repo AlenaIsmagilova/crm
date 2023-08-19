@@ -62,7 +62,7 @@ const SignIn = ({
   return (
     <>
       {notFoundUser ? (
-        <>
+        <div>
           <p>Данного юзера не существует</p>
           <button
             className={styles.button}
@@ -71,7 +71,7 @@ const SignIn = ({
           >
             Вернуться назад
           </button>
-        </>
+        </div>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>
           <h2 className={styles.title}>Вход</h2>

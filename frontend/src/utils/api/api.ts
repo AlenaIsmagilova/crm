@@ -1,16 +1,9 @@
-import { baseUrl } from "../../constants/constants";
+import { API } from "../../constants/constants";
 import {
   IRegistrationForm,
   ISignInForm,
   ITemporaryUser,
 } from "../../helpers/types";
-
-export const API = {
-  baseUrl: baseUrl,
-  headers: {
-    "Content-Type": "application/json",
-  },
-};
 
 const handleResponse = (res: Response) => {
   if (res.ok) {
@@ -57,7 +50,7 @@ export const getCurrentTemporaryUserApi = (username: string) => {
   }).then(handleResponse);
 };
 
-export const getUser = () => {
+export const getUserApi = () => {
   return fetch(`${API.baseUrl}/users/me`, {
     method: "GET",
     headers: {
@@ -67,7 +60,7 @@ export const getUser = () => {
   }).then(handleResponse);
 };
 
-export const getUsers = () => {
+export const getUsersApi = () => {
   return fetch(`${API.baseUrl}/users`, {
     method: "GET",
     headers: {

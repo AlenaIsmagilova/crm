@@ -26,6 +26,7 @@ export enum RoleEnum {
 }
 
 export interface IUser {
+  username: string;
   id?: number;
   firstName: string;
   lastName: string;

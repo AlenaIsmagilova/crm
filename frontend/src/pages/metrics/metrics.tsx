@@ -11,6 +11,7 @@ import {
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
 import LineChart from "../../components/line-chart/line-chart";
+import styles from "./metrics.module.css";
 
 Chart.register(CategoryScale);
 
@@ -72,14 +73,13 @@ const Metrics = ({ isLoggedIn }: IMetricsProps) => {
         setBirthdayPeopleList(res);
       });
       getExpectedSalaryPaymentsApi().then((res) => {
-        console.log(res);
         setExpectedSalaryPayments(res);
       });
     }
   }, []);
 
   return (
-    <>
+    <div className={styles.mainContainer}>
       <p>
         Количество сотрудников, нанятых в текущем месяце:&nbsp;
         {countEmployedInCurrentMonth}
@@ -100,14 +100,13 @@ const Metrics = ({ isLoggedIn }: IMetricsProps) => {
       <ul>
         {birthdayPeopleList.length !== 0 ? (
           <>
-            <p>В этом месяце день рождения отмечают:&nbsp;</p>
+            <h3>В этом месяце день рождения отмечают:</h3>
             {birthdayPeopleList.map((el) => (
               <li key={el.id}>
-                <p>Имя: {el.firstName}</p>
-                <p>Фамилия: {el.lastName}</p>
                 <p>
-                  Дата рождения: {moment(el.birthDate).format("DD.MM.YYYY г.")}
+                  Сотрудник: {el.firstName} {el.lastName}
                 </p>
+                Дата рождения: {moment(el.birthDate).format("DD.MM.YYYY г.")}
               </li>
             ))}
           </>
@@ -115,7 +114,7 @@ const Metrics = ({ isLoggedIn }: IMetricsProps) => {
           <p>В этом месяце дней рождений нет</p>
         )}
       </ul>
-    </>
+    </div>
   );
 };
 
