@@ -62,7 +62,7 @@ const SignIn = ({
   return (
     <>
       {notFoundUser ? (
-        <div>
+        <div className={styles.alert}>
           <p>Данного юзера не существует</p>
           <button
             className={styles.button}

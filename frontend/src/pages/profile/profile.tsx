@@ -111,7 +111,8 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
             Создать нового пользователя
           </Link>
         )}
-        {currentUser.role === RoleEnum.HR && (
+        {(currentUser.role === RoleEnum.HR ||
+          currentUser.role === RoleEnum.SUPERADMIN) && (
           <Link to="/metrics" className={styles.link}>
             Посмотреть данные по компании
           </Link>
@@ -160,7 +161,7 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
         </thead>
         <tbody>
           {allUsers
-            .filter((user) => user.role !== "SUPERADMIN")
+            .filter((user) => user.role !== RoleEnum.SUPERADMIN)
             .map((user) => (
               <tr className={styles.itemsList} key={user.id}>
                 {userIdEditMode === user.id ? (
@@ -309,7 +310,7 @@ const Profile = ({ setIsLoggedIn, currentUser, isLoggedIn }: IProfileProps) => {
                       <td className={styles.desc}>{user.position}</td>
                       <td className={styles.desc}>{user.salary}</td>
                     </>
-                    {currentUser.role !== "USER" && (
+                    {currentUser.role !== RoleEnum.USER && (
                       <td>
                         <button
                           className={styles.button}

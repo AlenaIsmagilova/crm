@@ -86,6 +86,7 @@ const SignUp = ({
           </h3>
           <div className={styles.inputWrapper}>
             <input
+              type="password"
               name="password"
               className={styles.input}
               placeholder={"Придумайте пароль"}
