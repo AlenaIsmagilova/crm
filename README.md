@@ -31,8 +31,12 @@ Frontend:
    git clone git@github.com:AlenaIsmagilova/crm.git
    ```
 
-2. Запустить команду
+2. Перейти в директорию /crm
+
+3. Запустить команду
 
    ```shell
    docker-compose up
    ```
+
+4. Открыть в браузере страницу http://localhost:3000/
